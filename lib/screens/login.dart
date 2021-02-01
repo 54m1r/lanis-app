@@ -77,7 +77,7 @@ class _AnmeldungState extends State<Anmeldung> {
   }
 
   void versucheAnzumelden() async {
-    await storage.deleteAll();
+    //await storage.deleteAll();
     SessionManager sessionManager = new SessionManager(
         'https://start.schulportal.hessen.de/index.php?i=6271',
         'https://start.schulportal.hessen.de/ajax.php?f=rsaPublicKey',
