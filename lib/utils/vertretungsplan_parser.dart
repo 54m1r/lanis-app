@@ -88,7 +88,7 @@ class VertretungsplanParser {
            else {
             var rng = new Random();
             for (var i = 0; i < rng.nextInt(4)+1; i++) {
-              int stunde = i;
+              int stunde = i+1;
               Klasse klasse = new Klasse("12BG2");
               Lehrer vertreter = new Lehrer("Wan");
               Lehrer lehrer = new Lehrer("Kmi");
