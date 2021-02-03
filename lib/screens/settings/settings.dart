@@ -2,11 +2,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'aussehenSettings.dart';
-import '../../../../vertretungsplan_app/lib/screens/settings/benachritigungenSettings.dart';
-import '../../../../vertretungsplan_app/lib/screens/settings/chatSettings.dart';
-import '../../../../vertretungsplan_app/lib/screens/settings/dashboardSettings.dart';
-import '../../../../vertretungsplan_app/lib/screens/settings/datenschutzSettings.dart';
-import '../../../../vertretungsplan_app/lib/screens/settings/impressum.dart';
+import 'benachritigungenSettings.dart';
+import 'chatSettings.dart';
+import 'dashboardSettings.dart';
+import 'datenschutzSettings.dart';
+import 'impressum.dart';
+
 
 class Settings extends StatelessWidget {
   @override
