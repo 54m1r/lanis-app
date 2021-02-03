@@ -3,6 +3,7 @@
 // found in the LICENSE file.
 
 import 'package:flutter/material.dart';
+import 'package:vertretungsplan_app/screens/nachrichten.dart';
 import 'package:vertretungsplan_app/screens/settings/settings.dart';
 import 'package:vertretungsplan_app/screens/stundenplan.dart';
 import 'package:vertretungsplan_app/screens/vertretungsplan.dart';
@@ -41,7 +42,7 @@ class _HomeStatefulWindgetState extends State<HomeStatefulWindget> {
     VertretungsplanScreen(),
     VertretungsplanScreen(),
     StundenplanScreen(),
-    VertretungsplanScreen(),
+    NachrichtenScreen(),
     Settings(),
   ];
 
