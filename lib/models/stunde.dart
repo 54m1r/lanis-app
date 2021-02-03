@@ -4,9 +4,9 @@ import 'raum.dart';
 
 class Stunde {
   Stunde(this.lehrer, this.fach, this.raum, this.stunde, this.zeitraum) {}
-  Lehrer lehrer;
-  Raum raum;
-  Fach fach;
-  int stunde;
-  String zeitraum;
+  final Lehrer lehrer;
+  final Raum raum;
+  final Fach fach;
+  final int stunde;
+  final String zeitraum;
 }
