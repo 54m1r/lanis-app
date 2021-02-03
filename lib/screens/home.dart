@@ -3,6 +3,8 @@
 // found in the LICENSE file.
 
 import 'package:flutter/material.dart';
+import 'package:vertretungsplan_app/screens/settings/settings.dart';
+import 'package:vertretungsplan_app/screens/stundenplan.dart';
 import 'package:vertretungsplan_app/screens/vertretungsplan.dart';
 
 import '../main.dart';
@@ -11,7 +13,44 @@ void main() => runApp(HomeScreen());
 
 int _selectedIndex = 0;
 
+/// This is the main application widget.
 class HomeScreen extends StatelessWidget {
+  static const String _title = 'Flutter Code Sample';
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: _title,
+      home: HomeStatefulWindget(),
+    );
+  }
+}
+
+/// This is the stateful widget that the main application instantiates.
+class HomeStatefulWindget extends StatefulWidget {
+  HomeStatefulWindget({Key key}) : super(key: key);
+
+  @override
+  _HomeStatefulWindgetState createState() => _HomeStatefulWindgetState();
+}
+
+/// This is the private State class that goes with MyStatefulWidget.
+class _HomeStatefulWindgetState extends State<HomeStatefulWindget> {
+  int _selectedIndex = 0;
+  static List<Widget> _widgetOptions = <Widget>[
+    VertretungsplanScreen(),
+    VertretungsplanScreen(),
+    StundenplanScreen(),
+    VertretungsplanScreen(),
+    Settings(),
+  ];
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -66,7 +105,7 @@ class HomeScreen extends StatelessWidget {
                   Expanded(
                     child: Container(
                         margin: EdgeInsets.only(top: 20, bottom: 20),
-                        child: VertretungsplanScreen()
+                        child: _widgetOptions.elementAt(_selectedIndex), //https://api.flutter.dev/flutter/material/BottomNavigationBar-class.html
                     ),
                   ),
                 ],
@@ -99,9 +138,11 @@ class HomeScreen extends StatelessWidget {
           ],
           currentIndex: _selectedIndex,
           selectedItemColor: Colors.amber[800],
+          onTap: _onItemTapped,
           //onTap: _onItemTapped,
         ),
       ),
     );
   }
 }
+
