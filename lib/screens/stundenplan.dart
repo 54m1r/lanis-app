@@ -1,12 +1,9 @@
-import 'dart:developer';
 import 'package:flutter/material.dart';
-import 'package:vertretungsplan_app/models/Stundenplan.dart';
-
+import 'package:vertretungsplan_app/models/stundenplan.dart';
+import 'dart:developer' as developer;
 import 'package:vertretungsplan_app/utils/stundenplan_parser.dart';
 
-
 import '../main.dart';
-
 
 class StundenplanScreen extends StatefulWidget {
   StundenplanScreen({Key key}) : super(key: key);
@@ -17,13 +14,9 @@ class StundenplanScreen extends StatefulWidget {
 
 class _StundenplanScreen extends State<StundenplanScreen> {
   Future<List<Object>> _getStundenplan() async {
-
-
-    StundenplanParser stundenplanParser = new StundenplanParser(
-        nutzer.headers,
+    StundenplanParser stundenplanParser = new StundenplanParser(nutzer.headers,
         'https://start.schulportal.hessen.de/stundenplan.php?a=detail_klasse&e=1');
-    Stundenplan plan = (await stundenplanParser.parsen()) as Stundenplan;
-
+    Stundenplan plan = await stundenplanParser.parsen();
     List<Object> objects = new List<Object>();
 
 
@@ -48,12 +41,19 @@ class _StundenplanScreen extends State<StundenplanScreen> {
           } else if (snapshot.data.length == 0) {
             return Container(
               child: Center(
-                child: Text("Es gibt aktuell keine Vertretungen!"),
+                child: Text("Es gab Fehler beim Laden des Stundenplans!"),
               ),
             );
-          }
+          } else {
+            List<Object> plan = snapshot.data;
+            return Table(children: [
+              TableRow(children: [
 
+
+
+              ])
+            ],);
+          }
         });
   }
-
 }
