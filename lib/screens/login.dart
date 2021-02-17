@@ -7,6 +7,8 @@ import 'package:flutter/rendering.dart';
 import 'dart:developer' as developer;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:vertretungsplan_app/models/nutzer.dart';
+import 'package:vertretungsplan_app/screens/stundenplan.dart';
+import 'package:vertretungsplan_app/utils/utility.dart';
 
 import '../utils/session_manager.dart';
 
@@ -77,7 +79,7 @@ class _AnmeldungState extends State<Anmeldung> {
   }
 
   void versucheAnzumelden() async {
-    //await storage.deleteAll();
+    await storage.deleteAll();
     SessionManager sessionManager = new SessionManager(
         'https://start.schulportal.hessen.de/index.php?i=6271',
         'https://start.schulportal.hessen.de/ajax.php?f=rsaPublicKey',
@@ -88,10 +90,14 @@ class _AnmeldungState extends State<Anmeldung> {
     String nutzername = await storage.read(key: 'bn');
     String password = await storage.read(key: 'psw');
 
+
+    developer.log("Nutername: ${nutzername}.");
+
     Nutzer loginNutzer = await sessionManager.login(nutzername, password);
 
     if (loginNutzer != null) {
       nutzer = loginNutzer;
+
       Navigator.push(context, MaterialPageRoute(builder: (context) => HomeScreen()));
     }
   }
@@ -117,6 +123,8 @@ class _AnmeldungState extends State<Anmeldung> {
       nutzer = loginNutzer;
       await storage.write(key: 'bn', value: bn);
       await storage.write(key: 'psw', value: psw);
+
+
       Navigator.push(context, MaterialPageRoute(builder: (context) => HomeScreen()));
     } else {
       showDialog<AlertDialog>(
@@ -124,7 +132,7 @@ class _AnmeldungState extends State<Anmeldung> {
           builder: (BuildContext cotext) {
             return AlertDialog(
                 title: Text(
-                    'Leider war mit den eingegebenen Daten kein Login moeglich. Bitte ueberpruefen Sie, ob diese korrekt waren.'));
+                    'Leider war mit den eingegebenen Daten kein Login möglich. Bitte überpruefen Sie, ob diese korrekt waren.'));
           });
     }
   }
@@ -145,12 +153,17 @@ class _AnmeldungState extends State<Anmeldung> {
         ListTile(
           title: TextField(
             onChanged: (benutzername) {
-              bn = benutzername;
+              bn = removeWhitespaces(benutzername);
               setState(() {});
             },
+
             decoration: InputDecoration(
               border: OutlineInputBorder(),
               labelText: 'Benutzername',
+                prefix:   Padding(
+                    padding: EdgeInsets.only(top: 6),
+                    child:  Icon(Icons.account_circle_rounded, size: 20,)
+                )
             ),
           ),
         ),
@@ -167,12 +180,16 @@ class _AnmeldungState extends State<Anmeldung> {
             decoration: InputDecoration(
               border: OutlineInputBorder(),
               labelText: 'Passwort',
+              prefix:  const Padding(
+                padding: const EdgeInsets.only(right: 8),
+                child: const Icon(Icons.lock)
+              )
             ),
           ),
         ),
         OutlineButton(
           onPressed: anmeldung,
-          child: Text('Anmdelden'),
+          child: Text('Anmelden'),
         )
       ],
     )));

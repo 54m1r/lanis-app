@@ -1,17 +1,10 @@
 import 'klasse.dart';
-import 'stundenplantag.dart';
+import 'stunde.dart';
 
 class Stundenplan {
-  Stundenplan(this.klasse, this.gueltigkeit, this.tage);
+  Stundenplan(this.klasse, this.gueltigkeit, this.stunden);
 
   Klasse klasse;
   String gueltigkeit;
-  List<Stundenplantag> tage;
-
-  Stundenplantag getTag(var tag) {
-    tage.forEach((element) {
-      if (element.tag == tag) return element;
-    });
-    return null;
-  }
+  Map<int, List<List<Stunde>>> stunden;
 }

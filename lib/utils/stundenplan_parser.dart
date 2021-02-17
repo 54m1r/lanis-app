@@ -13,8 +13,8 @@ import 'package:html/parser.dart'
     as htmlParser; // Contains HTML parsers to generate a Document object
 import 'package:html/dom.dart'
     as htmlDom; // Contains DOM related classes for extracting data from elements
+import 'package:vertretungsplan_app/models/tag.dart';
 
-import 'package:vertretungsplan_app/models/stundenplantag.dart';
 import 'package:vertretungsplan_app/utils/utility.dart';
 
 class StundenplanParser {
@@ -36,95 +36,62 @@ class StundenplanParser {
         stundenplanDocument.getElementsByTagName("h2")[0].text.split(" ")[2]);
     String gueltigkeit =
         stundenplanDocument.querySelector(".plan").attributes["data-date"];
-
-    List<List<Stunde>> montag = [];
-    List<List<Stunde>> dienstag = [];
-    List<List<Stunde>> mittwoch = [];
-    List<List<Stunde>> donnerstag = [];
-    List<List<Stunde>> freitag = [];
-    var x = 0;
+    Map<int, List<List<Stunde>>> plan_map = new Map();
     for (var zeile in zeilen) {
-      var c = 0;
-      x++;
-      for (var td in zeile.getElementsByTagName("td")) {
-        // c++;
-        List<Fach> faecher = [];
-        List<Lehrer> lehrer = [];
-        List<Raum> raeume = [];
-        if (td.attributes['rowspan'] != "1" &&
-            removeWhitespaces(td.text) == "") {
-          faecher.add(new Fach("frei"));
-          lehrer.add(new Lehrer("frei"));
-          raeume.add(new Raum("frei"));
+      var spalten_selector = zeile.querySelectorAll("td");
+      int stunde_c = int.parse(removeWhitespaces(
+          spalten_selector[0].children[1].text.split(".")[0]));
+
+      var counter = 0;
+      List<List<Stunde>> stunden_collection_list = [];
+      for (var spalte in spalten_selector) {
+        if (counter != 0) {
+          Tag t = Tag.values[counter - 1];
+
+          var stunden = spalte.querySelectorAll(".stunde");
+          List<Stunde> stunden_list = [];
+
+          if (stunden.length == 0) {
+            //Freistunde
+            Stunde s = Stunde(
+                Lehrer("Frei"),
+                Fach("Frei"),
+                Raum("Frei"),
+                stunde_c,
+                t,
+                removeWhitespaces(
+                    spalten_selector[0].children[0].text.split("Stunde")[1]));
+            stunden_list.add(s);
+          } else {
+            for (var stunde in stunden) {
+              Stunde s = Stunde(
+                  Lehrer(removeWhitespaces(stunde.children[2].text)),
+                  Fach(stunde.children[0].text),
+                  Raum(removeWhitespaces(stunde.attributes['title']
+                      .split("Raum ")[1]
+                      .split(" ")[0])),
+                  stunde_c,
+                  t,
+                  removeWhitespaces(
+                      spalten_selector[0].children[0].text.split("Stunde")[1]));
+              stunden_list.add(s);
+            }
+          }
+          stunden_collection_list.add(stunden_list);
         }
 
-        for (var bold in td.getElementsByTagName("b")) {
-          if (removeWhitespaces(bold.text) != "") {
-            if (!bold.text.contains("Stunde")) faecher.add(new Fach(bold.text));
-          }
-        }
-        for (var ln in td.getElementsByTagName("small")) {
-          if (ln.parent.classes.first.toString() != "VonBis") {
-            lehrer.add(new Lehrer(ln.text));
-          }
-        }
+        counter++;
+      }
+      if(stunden_collection_list.length == 5){
+        plan_map.putIfAbsent(stunde_c, () => stunden_collection_list);
 
-        for (var st in td.getElementsByClassName("stunde")) {
-          raeume.add(new Raum(st.attributes['title'].split(" ")[3]));
-        }
-        //developer.log("Listen:");
-        //developer.log("${faecher}");
-        //developer.log("${lehrer}");
-        //developer.log("${raeume}");
-        if (faecher.isNotEmpty && lehrer.isNotEmpty && raeume.isNotEmpty) {
-          c++;
-          List<Stunde> stunden = [];
-          for (var l = 0; l < faecher.length; l++) {
-            Stunde s = new Stunde(
-                lehrer.elementAt(l),
-                faecher.elementAt(l),
-                raeume.elementAt(l),
-                x,
-                zeilen
-                    .elementAt(x - 1)
-                    .getElementsByClassName("VonBis")
-                    .first
-                    .text);
-            stunden.add(s);
-          }
-
-          switch (c) {
-            case 1:
-              montag.add(stunden);
-
-              break;
-            case 2:
-              dienstag.add(stunden);
-              break;
-            case 3:
-              mittwoch.add(stunden);
-              break;
-            case 4:
-              donnerstag.add(stunden);
-              break;
-            case 5:
-              freitag.add(stunden);
-              c = 0;
-              break;
-          }
-        }
+      }else{
+        developer.log("Es wurden nicht alle Tage vom Stundenplan generiert!");
       }
     }
-    List<Stundenplantag> tage = [];
-    tage.add(new Stundenplantag(montag, "Montag"));
-    tage.add(new Stundenplantag(dienstag, "Dienstag"));
-    tage.add(new Stundenplantag(mittwoch, "Mittwoch"));
-    tage.add(new Stundenplantag(donnerstag, "Donnerstag"));
-    tage.add(new Stundenplantag(freitag, "Freitag"));
-    Stundenplan s = new Stundenplan(k, gueltigkeit, tage);
 
-    developer.log("${s.tage}");
+    Stundenplan plan = Stundenplan(k, gueltigkeit, plan_map);
 
-    return s;
+    return plan;
   }
 }

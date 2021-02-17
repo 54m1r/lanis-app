@@ -6,20 +6,7 @@ class AussehenSettings extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Color.fromRGBO(35, 152, 185, 100),
-        title: Row(
-          children: [
 
-            Text(
-                'Einstellungen'
-            ),
-            const Padding(padding: EdgeInsets.symmetric(horizontal: 5),
-              child: Icon(Icons.settings),
-            ),
-          ],
-        ),
-      ),
       body: AussehenSettingsBody(),
     );
   }

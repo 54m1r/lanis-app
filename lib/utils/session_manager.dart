@@ -82,7 +82,7 @@ class SessionManager {
 
       var loginResponse = await http
           .post(loginUrl, headers: headers, body: {'crypt': loginDataCrypt});
-
+      developer.log("Headers:");
       developer.log(headers.toString());
       developer.log(loginResponse.body);
 
@@ -91,7 +91,7 @@ class SessionManager {
       }
 
       var loginJsonResponse = convert.jsonDecode(loginResponse.body);
-
+      developer.log("Login JSON Response:");
       developer.log(loginJsonResponse.toString());
 
       try {
