@@ -23,4 +23,27 @@ extension Tage on Tag {
         break;
     }
   }
+
+  String translation(String day){
+    switch(day){
+      case "Monday":
+        return Tag.montag.name;
+        break;
+      case "Tuesday":
+        return Tag.dienstag.name;
+        break;
+      case "Wednesday":
+        return Tag.mittwoch.name;
+        break;
+      case "Thursday":
+        return Tag.donnerstag.name;
+        break;
+      case "Friday":
+        return Tag.freitag.name;
+        break;
+      default:
+        return Tag.montag.name;
+        break;
+    }
+  }
 }

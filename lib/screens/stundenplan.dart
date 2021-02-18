@@ -106,18 +106,25 @@ class _StundenplanScreen extends State<StundenplanScreen> {
       for (var x = 0; x < map.length; x++) {
         List<TableCell> cells = [];
         cells.add(TableCell(
-          child: Text("${x + 1}"),
+          child: Padding(child: Center(child: Text("${x + 1}", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20))), padding: EdgeInsets.only(top: 30),)
         ));
         for (var stunden in map[x + 1]) {
           List<Widget> children = [];
           var sc = 0;
           for (var stunde in stunden) {
             sc++;
-            MessageItem m = MessageItem(
-                "${stunde.fach.kuerzel} (${stunde.lehrer.kuerzel})",
-                stunde.raum.name);
-            children.add(m.buildTitle(context));
-            children.add(m.buildSubtitle(context));
+
+
+            if(stunde.fach.kuerzel == "Frei" && stunde.lehrer.kuerzel == "Frei" && stunde.raum.name == "Frei"){
+              children.add(Center(child: Text("---", style: style)));
+            }else {
+              MessageItem m = MessageItem(
+                  "${stunde.fach.kuerzel} (${stunde.lehrer.kuerzel})",
+                  stunde.raum.name);
+
+              children.add(Center(child: m.buildTitle(context)));
+              children.add(Center(child: m.buildSubtitle(context)));
+            }
             if (stunden.length > 1 && sc < stunden.length) {
               children.add(Divider(height: 10, indent: 5, endIndent: 5, thickness: 2, color: Colors.white,));
             }

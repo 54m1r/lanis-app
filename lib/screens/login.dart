@@ -15,6 +15,7 @@ import '../utils/session_manager.dart';
 import 'package:vertretungsplan_app/main.dart';
 
 import 'home.dart';
+import 'loading.dart';
 
 void main() async {
   runApp(MaterialApp(home: Willkommen()));
@@ -73,13 +74,11 @@ class _AnmeldungState extends State<Anmeldung> {
 
   @override
   Future<void> initState() {
-
     versucheAnzumelden();
     super.initState();
   }
 
   void versucheAnzumelden() async {
-    await storage.deleteAll();
     SessionManager sessionManager = new SessionManager(
         'https://start.schulportal.hessen.de/index.php?i=6271',
         'https://start.schulportal.hessen.de/ajax.php?f=rsaPublicKey',
@@ -90,15 +89,19 @@ class _AnmeldungState extends State<Anmeldung> {
     String nutzername = await storage.read(key: 'bn');
     String password = await storage.read(key: 'psw');
 
+    if (nutzername != null || password != null) {
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => Loading()));
+      Nutzer loginNutzer = await sessionManager.login(nutzername, password);
 
-    developer.log("Nutername: ${nutzername}.");
+      if (loginNutzer != null) {
+        nutzer = loginNutzer;
 
-    Nutzer loginNutzer = await sessionManager.login(nutzername, password);
-
-    if (loginNutzer != null) {
-      nutzer = loginNutzer;
-
-      Navigator.push(context, MaterialPageRoute(builder: (context) => HomeScreen()));
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => HomeScreen()));
+      }
+    }else{
+      developer.log("No password in storage... Skipping");
     }
   }
 
@@ -124,8 +127,8 @@ class _AnmeldungState extends State<Anmeldung> {
       await storage.write(key: 'bn', value: bn);
       await storage.write(key: 'psw', value: psw);
 
-
-      Navigator.push(context, MaterialPageRoute(builder: (context) => HomeScreen()));
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => HomeScreen()));
     } else {
       showDialog<AlertDialog>(
           context: context,
@@ -156,15 +159,15 @@ class _AnmeldungState extends State<Anmeldung> {
               bn = removeWhitespaces(benutzername);
               setState(() {});
             },
-
             decoration: InputDecoration(
-              border: OutlineInputBorder(),
-              labelText: 'Benutzername',
-                prefix:   Padding(
+                border: OutlineInputBorder(),
+                labelText: 'Benutzername',
+                prefix: Padding(
                     padding: EdgeInsets.only(top: 6),
-                    child:  Icon(Icons.account_circle_rounded, size: 20,)
-                )
-            ),
+                    child: Icon(
+                      Icons.account_circle_rounded,
+                      size: 20,
+                    ))),
           ),
         ),
         Container(
@@ -178,13 +181,11 @@ class _AnmeldungState extends State<Anmeldung> {
             },
             obscureText: true,
             decoration: InputDecoration(
-              border: OutlineInputBorder(),
-              labelText: 'Passwort',
-              prefix:  const Padding(
-                padding: const EdgeInsets.only(right: 8),
-                child: const Icon(Icons.lock)
-              )
-            ),
+                border: OutlineInputBorder(),
+                labelText: 'Passwort',
+                prefix: const Padding(
+                    padding: const EdgeInsets.only(right: 8),
+                    child: const Icon(Icons.lock))),
           ),
         ),
         OutlineButton(

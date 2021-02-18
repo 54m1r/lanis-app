@@ -121,7 +121,7 @@ class _HomeStatefulWindgetState extends State<HomeStatefulWindget> {
               label: 'Dashboard',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.business),
+              icon: Icon(Icons.schedule),
               label: 'Vertretungsplan',
             ),
             BottomNavigationBarItem(

@@ -6,6 +6,8 @@ import 'dart:math';
 
 import 'package:crypton/crypton.dart';
 import 'package:vertretungsplan_app/models/vertretungsplan.dart';
+import 'package:vertretungsplan_app/screens/home.dart';
+import 'package:vertretungsplan_app/screens/loading.dart';
 import 'package:vertretungsplan_app/screens/login.dart';
 import 'package:vertretungsplan_app/utils/cryptojs_aes_encryption_helper.dart';
 
@@ -21,11 +23,11 @@ import 'package:vertretungsplan_app/utils/vertretungsplan_parser.dart';
 
 import 'models/nutzer.dart';
 
+
 //SessionManager sessionManager;
 Nutzer nutzer;
 
 void main() async {
-
   /*SessionManager sessionManager = new SessionManager('https://start.schulportal.hessen.de/index.php?i=6271',
       'https://start.schulportal.hessen.de/ajax.php?f=rsaPublicKey',
       'https://start.schulportal.hessen.de/ajax.php?f=rsaHandshake&s='+(new Random().nextInt(90) + 10).toString(),
@@ -45,9 +47,3 @@ void main() async {
 
   runApp(MaterialApp(home: Willkommen()));
 }
-
-
-
-
-
-

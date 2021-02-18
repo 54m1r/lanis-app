@@ -51,7 +51,10 @@ class _VertretungsplanScreen extends State<VertretungsplanScreen> {
           if (snapshot.data == null) {
             return Container(
               child: Center(
-                child: Text("Lädt..."),
+                child: Center(
+                    child: CircularProgressIndicator(
+                      value: null,
+                    )),
               ),
             );
           } else if (snapshot.data.length == 0) {
