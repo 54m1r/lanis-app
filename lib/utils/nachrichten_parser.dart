@@ -30,10 +30,12 @@ class NachrichtenParser {
   final String nachrichtenUrl;
 
   NachrichtenParser(this.headers, this.nachrichtenUrl) {
+
     //TODO
   }
 
   Future<Vertretungsplan> parsen() async {
+    developer.log("${headers}");
     await http.get(nachrichtenUrl, headers: headers);
     await http.get('https://start.schulportal.hessen.de/js/log.js', headers: headers);
     await http.get('https://start.schulportal.hessen.de/js/log.js', headers: headers);
@@ -93,11 +95,8 @@ class NachrichtenParser {
     //await http.get('', headers: headers);
     //await http.get('', headers: headers);
 
-    var nachrichtenResponse = await http.post('https://start.schulportal.hessen.de/nachrichten.php?a=headers&getType=visibleOnly&last=0', headers: headers, body: {
-      "a":	"headers",
-      "getType":	"visibleOnly",
-      "last":	"0"
-    });
+    var nachrichtenResponse = await http.post('https://start.schulportal.hessen.de/nachrichten.php?a=headers&getType=visibleOnly&last=0', headers: headers);
+    developer.log("${nachrichtenResponse.body}");
     //var nachrichtenJsonResponse = convert.jsonDecode(nachrichtenResponse.body);
 
     developer.log("Anfragen gesendet!");
