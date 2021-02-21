@@ -100,7 +100,7 @@ class _AnmeldungState extends State<Anmeldung> {
         Navigator.push(
             context, MaterialPageRoute(builder: (context) => HomeScreen()));
       }
-    }else{
+    } else {
       developer.log("No password in storage... Skipping");
     }
   }
@@ -132,7 +132,7 @@ class _AnmeldungState extends State<Anmeldung> {
     } else {
       showDialog<AlertDialog>(
           context: context,
-          builder: (BuildContext cotext) {
+          builder: (BuildContext context) {
             return AlertDialog(
                 title: Text(
                     'Leider war mit den eingegebenen Daten kein Login möglich. Bitte überpruefen Sie, ob diese korrekt waren.'));
