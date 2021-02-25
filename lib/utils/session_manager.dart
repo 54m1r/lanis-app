@@ -5,8 +5,8 @@ import 'dart:math';
 
 import 'package:crypton/crypton.dart';
 import 'package:flutter/services.dart';
-import 'package:vertretungsplan_app/models/nutzer.dart';
-import 'package:vertretungsplan_app/utils/cryptojs_aes_encryption_helper.dart';
+import 'package:schulportal_hessen_app/models/nutzer.dart';
+import 'package:schulportal_hessen_app/utils/cryptojs_aes_encryption_helper.dart';
 
 import 'package:http/http.dart' as http;
 
@@ -17,7 +17,7 @@ import 'package:html/dom.dart'
 
 import 'dart:convert' as convert;
 import 'package:intl/intl.dart';
-import 'package:vertretungsplan_app/utils/utility.dart';
+import 'package:schulportal_hessen_app/utils/utility.dart';
 
 class SessionManager {
   Map<String, String> headers = {

@@ -4,14 +4,14 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:crypton/crypton.dart';
-import 'package:vertretungsplan_app/models/fach.dart';
-import 'package:vertretungsplan_app/models/klasse.dart';
-import 'package:vertretungsplan_app/models/lehrer.dart';
-import 'package:vertretungsplan_app/models/raum.dart';
-import 'package:vertretungsplan_app/models/vertretung.dart';
-import 'package:vertretungsplan_app/models/vertretungsplan.dart';
-import 'package:vertretungsplan_app/models/vertretungsplanTag.dart';
-import 'package:vertretungsplan_app/utils/cryptojs_aes_encryption_helper.dart';
+import 'package:schulportal_hessen_app/models/fach.dart';
+import 'package:schulportal_hessen_app/models/klasse.dart';
+import 'package:schulportal_hessen_app/models/lehrer.dart';
+import 'package:schulportal_hessen_app/models/raum.dart';
+import 'package:schulportal_hessen_app/models/vertretung.dart';
+import 'package:schulportal_hessen_app/models/vertretungsplan.dart';
+import 'package:schulportal_hessen_app/models/vertretungsplanTag.dart';
+import 'package:schulportal_hessen_app/utils/cryptojs_aes_encryption_helper.dart';
 
 import 'package:http/http.dart' as http;
 
@@ -22,7 +22,7 @@ as htmlDom; // Contains DOM related classes for extracting data from elements
 
 import 'dart:convert' as convert;
 import 'package:intl/intl.dart';
-import 'package:vertretungsplan_app/utils/utility.dart';
+import 'package:schulportal_hessen_app/utils/utility.dart';
 
 class VertretungsplanParser {
   Map<String, String> headers;
@@ -34,10 +34,10 @@ class VertretungsplanParser {
   }
 
   Future<Vertretungsplan> parsen() async {
-    developer.log("asdhasd");
+    developer.log("Trying to get Vertretungsplan");
     var vertretungsplanResponse =
     await http.get(vertretungsplanUrl, headers: headers);
-    developer.log("asdhasd");
+
 
     var vertretungsPlanDocument =
     htmlParser.parse(vertretungsplanResponse.body);

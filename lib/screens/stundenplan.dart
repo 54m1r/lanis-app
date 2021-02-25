@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:vertretungsplan_app/models/stunde.dart';
-import 'package:vertretungsplan_app/models/stundenplan.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:schulportal_hessen_app/models/stunde.dart';
+import 'package:schulportal_hessen_app/models/stundenplan.dart';
 import 'dart:developer' as developer;
-import 'package:vertretungsplan_app/models/tag.dart';
-import 'package:vertretungsplan_app/utils/lehrernamen_parser.dart';
-import 'package:vertretungsplan_app/utils/stundenplan_parser.dart';
+import 'package:schulportal_hessen_app/models/tag.dart';
+import 'package:schulportal_hessen_app/utils/lehrernamen_parser.dart';
+import 'package:schulportal_hessen_app/utils/stundenplan_parser.dart';
 import 'package:intl/intl.dart';
-import 'package:vertretungsplan_app/utils/ui/listitem.dart';
+import 'package:schulportal_hessen_app/utils/ui/listitem.dart';
 
 import '../main.dart';
 
@@ -154,105 +155,15 @@ class _StundenplanScreen extends State<StundenplanScreen> {
               children.add(GestureDetector(
                 child: Center(child: m.buildTitle(context)),
                 onTap: () {
-                  showModalBottomSheet(
-                      context: context,
-                      builder: (BuildContext bc) {
-                        return Container(
-                            height: MediaQuery.of(context).size.height * .6,
-                            child: Padding(
-                              child: Column(children: <Widget>[
-                                Row(children: <Widget>[
-                                  Text(
-                                    "${stunde.stunde}. Stunde am ${stunde.tag.name}",
-                                    style: TextStyle(fontSize: 24),
-                                  ),
-                                  Spacer(),
-                                  IconButton(
-                                      icon: Icon(Icons.arrow_downward),
-                                      color: Colors.white,
-                                      onPressed: () {
-                                        Navigator.of(context).pop();
-                                      })
-                                ]),
-                                Row(
-                                  children: <Widget>[
-                                    Text(
-                                      "Von ${stunde.zeitraum}",
-                                      style: TextStyle(fontSize: 15),
-                                    ),
-                                    Padding(
-                                      child: Icon(Icons.access_time),
-                                      padding: EdgeInsets.only(left: 5),
-                                    )
-                                  ],
-                                ),
-                                Row(
-                                  children: [
-                                    FutureBuilder(
-                                        future: getLehrerNamen(
-                                            stunde.lehrer.kuerzel),
-                                        builder: (BuildContext context,
-                                            AsyncSnapshot snapshot) {
-                                          if (snapshot.data == null) {
-                                            return Container(
-                                              child: Center(
-                                                  child:
-                                                      CircularProgressIndicator(
-                                                value: null,
-                                              )),
-                                            );
-                                          } else if (snapshot.data.length ==
-                                              0) {
-                                            return Text(
-                                                "Lehrer wurde nicht gefunden!");
-                                          } else {
-                                            return Column(children: [
-                                              Row(children: [
-                                                Icon(Icons
-                                                    .supervisor_account_rounded),
-                                                Padding(
-                                                  child: Text(
-                                                      "Lehrer: ${snapshot.data[0]}"),
-                                                  padding:
-                                                      EdgeInsets.only(left: 5),
-                                                )
-                                              ]),
-                                              Row(children: [
-                                                Icon(Icons.sensor_door),
-                                                Padding(
-                                                  child: Text(
-                                                      "Raum: ${stunde.raum.name}"),
-                                                  padding:
-                                                      EdgeInsets.only(left: 5),
-                                                )
-                                              ]),
-                                              Row(children: [
-                                                Icon(Icons
-                                                    .calendar_today_outlined),
-                                                Padding(
-                                                  child: Text(
-                                                      "Fach: ${stunde.fach.kuerzel}"),
-                                                  padding:
-                                                      EdgeInsets.only(left: 5),
-                                                )
-                                              ]),
-                                            ]);
-                                          }
-                                        })
-                                  ],
-                                ),
-                              ]),
-                              padding: const EdgeInsets.only(
-                                  left: 25.0,
-                                  right: 8.0,
-                                  top: 8.0,
-                                  bottom: 8.0),
-                            ));
-                      });
+                  open(stunde);
                 },
               ));
               children.add(GestureDetector(
-                  child: Center(child: m.buildSubtitle(context))));
+                child: Center(child: m.buildSubtitle(context)),
+                onTap: () {
+                  open(stunde);
+                },
+              ));
             }
             if (stunden.length > 1 && sc < stunden.length) {
               children.add(Divider(
@@ -278,10 +189,170 @@ class _StundenplanScreen extends State<StundenplanScreen> {
 
   Future<List<Object>> getLehrerNamen(String kuerzel) async {
     List<Object> o = [];
-    LehrerNamenParser p = LehrerNamenParser(nutzer.headers,
-        "https://start.schulportal.hessen.de/nachrichten.php?q=${kuerzel}&a=searchRecipt");
+    LehrerNamenParser p = LehrerNamenParser(
+        nutzer.headers,
+        "https://start.schulportal.hessen.de/nachrichten.php?q=${kuerzel}&a=searchRecipt",
+        kuerzel);
     String s = await p.parsen();
     o.add(s);
     return o;
+  }
+
+  void open(Stunde stunde) {
+    showModalBottomSheet(
+        context: context,
+        builder: (BuildContext bc) {
+          return Container(
+              height: MediaQuery.of(context).size.height * .6,
+              child: Padding(
+                child: Column(children: <Widget>[
+                  Row(children: <Widget>[
+                    Text(
+                      "${stunde.stunde}. Stunde am ${stunde.tag.name}",
+                      style: TextStyle(fontSize: 24),
+                    ),
+                    Spacer(),
+                    IconButton(
+                        icon: Icon(Icons.arrow_downward),
+                        color: Colors.white,
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        })
+                  ]),
+                  Row(
+                    children: <Widget>[
+                      Padding(
+                        child: Text(
+                          "Von ${stunde.zeitraum}",
+                          style: TextStyle(fontSize: 15),
+                        ),
+                        padding: EdgeInsets.only(bottom: 20),
+                      ),
+                      Padding(
+                        child: Icon(Icons.access_time),
+                        padding: EdgeInsets.only(left: 5, bottom: 20),
+                      )
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      FutureBuilder(
+                          future: getLehrerNamen(stunde.lehrer.kuerzel),
+                          builder:
+                              (BuildContext context, AsyncSnapshot snapshot) {
+                            if (snapshot.data == null) {
+                              return Container(
+                                child: Center(
+                                    child: CircularProgressIndicator(
+                                  value: null,
+                                )),
+                              );
+                            } else if (snapshot.data.length == 0) {
+                              return Text("Lehrer wurde nicht gefunden!");
+                            } else {
+                              var s = Text('', style: TextStyle(fontSize: 10));
+
+                              return Column(
+                                  children: [
+                                    Row(children: [
+                                      Padding(
+                                        child: FaIcon(
+                                            FontAwesomeIcons.userGraduate,
+                                            size: 16),
+                                        padding: EdgeInsets.only(bottom: 10),
+                                      ),
+                                      Padding(
+                                        child:
+                                            Text("Lehrer: ${snapshot.data[0]}"),
+                                        padding: EdgeInsets.only(
+                                            left: 5, bottom: 10),
+                                      )
+                                    ]),
+                                    Row(children: [
+                                      Padding(
+                                        child: FaIcon(FontAwesomeIcons.school,
+                                            size: 16),
+                                        padding: EdgeInsets.only(bottom: 10),
+                                      ),
+                                      Padding(
+                                        child:
+                                            Text("Raum: ${stunde.raum.name}"),
+                                        padding: EdgeInsets.only(
+                                            left: 5, bottom: 10),
+                                      )
+                                    ]),
+                                    Row(children: [
+                                      Padding(
+                                        child: FaIcon(
+                                            FontAwesomeIcons.calendarAlt,
+                                            size: 16),
+                                        padding: EdgeInsets.only(bottom: 10),
+                                      ),
+                                      Padding(
+                                        child: Text(
+                                            "Fach: ${stunde.fach.kuerzel}"),
+                                        padding: EdgeInsets.only(
+                                            left: 5, bottom: 10),
+                                      ),
+                                    ]),
+                                    Row(
+                                      children: [
+                                        OutlinedButton.icon(
+                                            onPressed: () {
+                                              developer.log("Ok");
+                                            },
+                                            style: ButtonStyle(
+                                                backgroundColor:
+                                                    MaterialStateProperty
+                                                        .resolveWith((states) =>
+                                                            getColor(states)),
+                                                foregroundColor:
+                                                    MaterialStateProperty
+                                                        .resolveWith((states) =>
+                                                            getColor1(states))),
+                                            icon: FaIcon(FontAwesomeIcons.eye,
+                                                size: 18),
+                                            label: Text("Verstecken"))
+                                      ],
+                                    ),
+                                    Row(
+                                      children: [s],
+                                    )
+                                  ],
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisSize: MainAxisSize.min);
+                            }
+                          })
+                    ],
+                  ),
+                ]),
+                padding: const EdgeInsets.only(
+                    left: 25.0, right: 8.0, top: 8.0, bottom: 8.0),
+              ));
+        });
+  }
+
+  Color getColor(Set<MaterialState> states) {
+    const Set<MaterialState> interactiveStates = <MaterialState>{
+      MaterialState.pressed,
+      MaterialState.hovered,
+      MaterialState.focused,
+    };
+    if (states.any(interactiveStates.contains)) {
+      return Colors.black;
+    }
+    return Colors.blue;
+  }
+
+  Color getColor1(Set<MaterialState> states) {
+    const Set<MaterialState> interactiveStates = <MaterialState>{
+      MaterialState.pressed,
+      MaterialState.hovered,
+      MaterialState.focused,
+    };
+    if (states.any(interactiveStates.contains)) {
+      return Colors.white;
+    }
+    return Colors.white;
   }
 }

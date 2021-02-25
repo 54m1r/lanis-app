@@ -6,13 +6,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'dart:developer' as developer;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:vertretungsplan_app/models/nutzer.dart';
-import 'package:vertretungsplan_app/screens/stundenplan.dart';
-import 'package:vertretungsplan_app/utils/utility.dart';
+import 'package:schulportal_hessen_app/models/nutzer.dart';
+import 'package:schulportal_hessen_app/screens/stundenplan.dart';
+import 'package:schulportal_hessen_app/utils/utility.dart';
 
 import '../utils/session_manager.dart';
 
-import 'package:vertretungsplan_app/main.dart';
+import 'package:schulportal_hessen_app/main.dart';
 
 import 'home.dart';
 import 'loading.dart';

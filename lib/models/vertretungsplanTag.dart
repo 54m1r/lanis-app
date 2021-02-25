@@ -1,4 +1,4 @@
-import 'package:vertretungsplan_app/models/vertretung.dart';
+import 'package:schulportal_hessen_app/models/vertretung.dart';
 import 'package:intl/intl.dart';
 import 'tag.dart';
 import 'dart:developer' as developer;

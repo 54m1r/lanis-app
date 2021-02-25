@@ -3,10 +3,10 @@
 // found in the LICENSE file.
 
 import 'package:flutter/material.dart';
-import 'package:vertretungsplan_app/screens/nachrichten.dart';
-import 'package:vertretungsplan_app/screens/settings/settings.dart';
-import 'package:vertretungsplan_app/screens/stundenplan.dart';
-import 'package:vertretungsplan_app/screens/vertretungsplan.dart';
+import 'package:schulportal_hessen_app/screens/nachrichten.dart';
+import 'package:schulportal_hessen_app/screens/settings/settings.dart';
+import 'package:schulportal_hessen_app/screens/stundenplan.dart';
+import 'package:schulportal_hessen_app/screens/vertretungsplan.dart';
 
 import '../main.dart';
 

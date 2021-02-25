@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:school_ui_toolkit/school_ui_toolkit.dart';
-import 'package:vertretungsplan_app/models/vertretung.dart';
-import 'package:vertretungsplan_app/models/vertretungsplan.dart';
-import 'package:vertretungsplan_app/models/vertretungsplanTag.dart';
-import 'package:vertretungsplan_app/utils/nachrichten_parser.dart';
-import 'package:vertretungsplan_app/utils/vertretungsplan_parser.dart';
+import 'package:schulportal_hessen_app/models/vertretung.dart';
+import 'package:schulportal_hessen_app/models/vertretungsplan.dart';
+import 'package:schulportal_hessen_app/models/vertretungsplanTag.dart';
+import 'package:schulportal_hessen_app/utils/nachrichten_parser.dart';
+import 'package:schulportal_hessen_app/utils/vertretungsplan_parser.dart';
 import 'dart:developer' as developer;
 
 import '../main.dart';

@@ -1,11 +1,11 @@
 import 'dart:developer' as developer;
 
-import 'package:vertretungsplan_app/models/fach.dart';
-import 'package:vertretungsplan_app/models/klasse.dart';
-import 'package:vertretungsplan_app/models/lehrer.dart';
-import 'package:vertretungsplan_app/models/raum.dart';
-import 'package:vertretungsplan_app/models/stunde.dart';
-import 'package:vertretungsplan_app/models/stundenplan.dart';
+import 'package:schulportal_hessen_app/models/fach.dart';
+import 'package:schulportal_hessen_app/models/klasse.dart';
+import 'package:schulportal_hessen_app/models/lehrer.dart';
+import 'package:schulportal_hessen_app/models/raum.dart';
+import 'package:schulportal_hessen_app/models/stunde.dart';
+import 'package:schulportal_hessen_app/models/stundenplan.dart';
 
 import 'package:http/http.dart' as http;
 
@@ -13,9 +13,9 @@ import 'package:html/parser.dart'
     as htmlParser; // Contains HTML parsers to generate a Document object
 import 'package:html/dom.dart'
     as htmlDom; // Contains DOM related classes for extracting data from elements
-import 'package:vertretungsplan_app/models/tag.dart';
+import 'package:schulportal_hessen_app/models/tag.dart';
 
-import 'package:vertretungsplan_app/utils/utility.dart';
+import 'package:schulportal_hessen_app/utils/utility.dart';
 
 class StundenplanParser {
   Map<String, String> headers;

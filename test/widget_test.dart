@@ -8,8 +8,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:vertretungsplan_app/main.dart';
-import 'package:vertretungsplan_app/screens/home.dart';
+import 'package:schulportal_hessen_app/main.dart';
+import 'package:schulportal_hessen_app/screens/home.dart';
 
 void main() {
   testWidgets('Counter increments smoke test', (WidgetTester tester) async {

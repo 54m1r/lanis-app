@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="vertretungsplanapp.vertretungsplan_app">
    <application
-        android:label="vertretungsplan_app"
+        android:label="Schulportal Hessen App"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
