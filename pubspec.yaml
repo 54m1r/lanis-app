@@ -49,6 +49,8 @@ dependencies:
   flutter_secure_storage: ^3.3.5
   flutter_launcher_icons: ^0.8.0
   font_awesome_flutter: ^8.11.0
+  navigation_history_observer: ^1.0.3+1
+
 
 flutter_icons:
   android: "ic_launcher"

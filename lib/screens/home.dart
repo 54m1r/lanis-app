@@ -43,7 +43,7 @@ class _HomeStatefulWindgetState extends State<HomeStatefulWindget> {
     VertretungsplanScreen(),
     StundenplanScreen(),
     NachrichtenScreen(),
-    Settings(),
+    Settings()
   ];
 
   void _onItemTapped(int index) {

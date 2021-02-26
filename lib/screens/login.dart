@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'dart:developer' as developer;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:navigation_history_observer/navigation_history_observer.dart';
 import 'package:schulportal_hessen_app/models/nutzer.dart';
 import 'package:schulportal_hessen_app/screens/stundenplan.dart';
 import 'package:schulportal_hessen_app/utils/utility.dart';
@@ -28,12 +29,24 @@ class Willkommen extends StatelessWidget {
 
   Widget build(BuildContext context) {
     void anmeldung() {}
-    return Scaffold(
-        appBar: AppBar(
-          title: Text('Anmeldung'),
-          backgroundColor: Color.fromRGBO(35, 152, 185, 100),
+    return MaterialApp(
+        navigatorObservers: [NavigationHistoryObserver()],
+        darkTheme: ThemeData(
+          brightness: Brightness.dark,
+          /* dark theme settings */
+          primaryColor: Color(0x222831),
         ),
-        body: Anmeldung());
+        themeMode: ThemeMode.dark,
+        title: 'Vertretungsplan',
+        theme: ThemeData(
+          primaryColor: Colors.blue,
+          //fontFamily: GoogleFonts.notoSans().fontFamily,
+        ),
+        home: Scaffold(
+            appBar: AppBar(
+              title: Text('Anmeldung'),
+            ),
+            body: Anmeldung()));
   }
 }
 
@@ -70,8 +83,6 @@ class Anmeldung extends StatefulWidget {
 }
 
 class _AnmeldungState extends State<Anmeldung> {
-  final storage = new FlutterSecureStorage();
-
   @override
   Future<void> initState() {
     versucheAnzumelden();
@@ -96,7 +107,7 @@ class _AnmeldungState extends State<Anmeldung> {
 
       if (loginNutzer != null) {
         nutzer = loginNutzer;
-
+        await Navigator.popUntil(context, (route) => false);
         Navigator.push(
             context, MaterialPageRoute(builder: (context) => HomeScreen()));
       }
@@ -134,8 +145,16 @@ class _AnmeldungState extends State<Anmeldung> {
           context: context,
           builder: (BuildContext context) {
             return AlertDialog(
-                title: Text(
-                    'Leider war mit den eingegebenen Daten kein Login möglich. Bitte überpruefen Sie, ob diese korrekt waren.'));
+              title: Text(
+                  'Leider war mit den eingegebenen Daten kein Login möglich. Bitte überpruefen Sie, ob diese korrekt waren.'),
+              actions: [
+                FlatButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: Text("Ok"))
+              ],
+            );
           });
     }
   }

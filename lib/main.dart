@@ -1,11 +1,13 @@
 
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:schulportal_hessen_app/screens/login.dart';
 
 import 'models/nutzer.dart';
 
 //SessionManager sessionManager;
 Nutzer nutzer;
+final storage = new FlutterSecureStorage();
 
 void main() async {
   /*SessionManager sessionManager = new SessionManager('https://start.schulportal.hessen.de/index.php?i=6271',

@@ -14,6 +14,6 @@ class VertretungsplanTag {
     final DateFormat formatter = DateFormat('EEEE, dd.MM.yyyy');
     String formatted = formatter.format(tag);
 
-    return formatted;
+    return Tag.freitag.replaceTranslation(formatted);
   }
 }

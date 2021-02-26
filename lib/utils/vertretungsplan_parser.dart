@@ -16,9 +16,9 @@ import 'package:schulportal_hessen_app/utils/cryptojs_aes_encryption_helper.dart
 import 'package:http/http.dart' as http;
 
 import 'package:html/parser.dart'
-as htmlParser; // Contains HTML parsers to generate a Document object
+    as htmlParser; // Contains HTML parsers to generate a Document object
 import 'package:html/dom.dart'
-as htmlDom; // Contains DOM related classes for extracting data from elements
+    as htmlDom; // Contains DOM related classes for extracting data from elements
 
 import 'dart:convert' as convert;
 import 'package:intl/intl.dart';
@@ -36,11 +36,10 @@ class VertretungsplanParser {
   Future<Vertretungsplan> parsen() async {
     developer.log("Trying to get Vertretungsplan");
     var vertretungsplanResponse =
-    await http.get(vertretungsplanUrl, headers: headers);
-
+        await http.get(vertretungsplanUrl, headers: headers);
 
     var vertretungsPlanDocument =
-    htmlParser.parse(vertretungsplanResponse.body);
+        htmlParser.parse(vertretungsplanResponse.body);
     var tabellen = vertretungsPlanDocument.getElementsByTagName('table');
 
     //TODO fixen
@@ -60,11 +59,11 @@ class VertretungsplanParser {
         var toParse = tabelle.attributes['id'];
         toParse = toParse.replaceFirst('vtable', '');
         DateTime tempDate =
-        new DateFormat("dd_MM_yyyy").parse(toParse); //vtable18_01_2021
+            new DateFormat("dd_MM_yyyy").parse(toParse); //vtable18_01_2021
         var day = new DateFormat("dd.MM.yyyy").format(tempDate);
 
         VertretungsplanTag vertretungsplanTag =
-        new VertretungsplanTag(tempDate);
+            new VertretungsplanTag(tempDate);
 
         var zeilen = tabelle.querySelectorAll('tbody tr');
 
@@ -78,12 +77,15 @@ class VertretungsplanParser {
             Lehrer lehrer = new Lehrer(removeWhitespaces(td[3].text));
             Fach fach = new Fach(removeWhitespaces(td[4].text));
             Raum raum = new Raum(removeWhitespaces(td[5].text));
-            String hinweis = removeWhitespaces(td[6].text);
-            String hinweis2 = removeWhitespaces(td[7].text);
+            String hinweis =
+                td[6].text.replaceAll("  ", "").replaceAll("\n", "");
+            String hinweis2 =
+                td[7].text.replaceAll("  ", "").replaceAll("\n", "");
             Vertretung vertretung = new Vertretung(stunde, klasse, vertreter,
                 lehrer, fach, raum, hinweis, hinweis2, vertretungsplanTag);
             vertretungsplan.vertretungen.add(vertretung);
           }
+          /*
 
            else {
             var rng = new Random();
@@ -101,7 +103,7 @@ class VertretungsplanParser {
                   lehrer, fach, raum, hinweis, hinweis2, vertretungsplanTag);
               vertretungsplan.vertretungen.add(vertretung);
             }
-          }
+          }*/
         });
       }
     });

@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-
+import 'dart:developer' as developer;
 import 'package:schulportal_hessen_app/models/vertretung.dart';
 import 'package:schulportal_hessen_app/models/vertretungsplan.dart';
 import 'package:schulportal_hessen_app/models/vertretungsplanTag.dart';
 import 'package:schulportal_hessen_app/utils/vertretungsplan_parser.dart';
-
 
 import '../main.dart';
 import '../models/vertretungsplanTag.dart';
@@ -53,8 +52,8 @@ class _VertretungsplanScreen extends State<VertretungsplanScreen> {
               child: Center(
                 child: Center(
                     child: CircularProgressIndicator(
-                      value: null,
-                    )),
+                  value: null,
+                )),
               ),
             );
           } else if (snapshot.data.length == 0) {
@@ -82,7 +81,7 @@ class _VertretungsplanScreen extends State<VertretungsplanScreen> {
                           text: object.getFormattedDate(),
                           style: TextStyle(
                               color: Color(0xFFececec),
-                              fontWeight: FontWeight.w300,
+                              fontWeight: FontWeight.bold,
                               fontSize: 16),
                         ),
                       ]),
@@ -98,52 +97,68 @@ class _VertretungsplanScreen extends State<VertretungsplanScreen> {
   }
 
   Widget _vertretunContainer(Vertretung vertretung) {
-    return Container(
-      width: 180,
-      margin: EdgeInsets.only(top: 5, bottom: 5),
-      padding: EdgeInsets.all(15),
-      decoration: BoxDecoration(
-          color: Color(0xff30475e), borderRadius: BorderRadius.circular(15)),
-      child: Row(
-        children: [
-          Container(
-            height: 40,
-            width: 40,
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: Color(0xfff2a365)),
-            child: Center(
-              child: Text(
-                vertretung.stunde.toString(),
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                    color: Color(0xff30475e),
-                    fontWeight: FontWeight.w300,
-                    fontSize: 18),
-              ),
-            ),
-          ),
-          SizedBox(
-            width: 20,
-          ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+    return GestureDetector(
+        child: Container(
+          width: 180,
+          margin: EdgeInsets.only(top: 5, bottom: 5),
+          padding: EdgeInsets.all(15),
+          decoration: BoxDecoration(
+              color: (vertretung.hinweis.contains(RegExp(r"[fF]rei")) ||
+                      vertretung.hinweis2.contains(RegExp(r"[fF]rei"))
+                  ? Color(0xff30455f)
+                  : Color(0xff30475e)),
+              borderRadius: BorderRadius.circular(15)),
+          child: Row(
             children: [
-              Text(
-                vertretung.hinweis + " " + vertretung.hinweis2,
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+              Container(
+                height: 40,
+                width: 40,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: (vertretung.hinweis.contains(RegExp(r"[fF]rei")) ||
+                            vertretung.hinweis2.contains(RegExp(r"[fF]rei"))
+                        ? Color(0xff65f278)
+                        : Color(0xfff2a365))),
+                child: Center(
+                  child: Text(
+                    vertretung.stunde.toString(),
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        color: Color(0xff30475e),
+                        fontWeight: FontWeight.w300,
+                        fontSize: 18),
+                  ),
+                ),
               ),
               SizedBox(
-                height: 5,
+                width: 20,
               ),
-              Text(
-                "${vertretung.fach.kuerzel} (${vertretung.raum.name}) - ${vertretung.lehrer.kuerzel}",
-                style: TextStyle(fontSize: 13, color: Colors.blueGrey[500]),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    vertretung.hinweis,
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+                  ),
+                  (vertretung.hinweis2.length > 1
+                      ? Text(
+                          vertretung.hinweis2,
+                        )
+                      : Text("--")),
+                  SizedBox(
+                    height: 5,
+                  ),
+                  Text(
+                    "${vertretung.fach.kuerzel} (${vertretung.raum.name}) - ${vertretung.lehrer.kuerzel}",
+                    style: TextStyle(fontSize: 13, color: Colors.blueGrey[500]),
+                  ),
+                ],
               ),
             ],
           ),
-        ],
-      ),
-    );
+        ),
+        onTap: () {
+          developer.log("Ok");
+        });
   }
 }

@@ -24,8 +24,8 @@ extension Tage on Tag {
     }
   }
 
-  String translation(String day){
-    switch(day){
+  String translation(String day) {
+    switch (day) {
       case "Monday":
         return Tag.montag.name;
         break;
@@ -45,5 +45,14 @@ extension Tage on Tag {
         return Tag.montag.name;
         break;
     }
+  }
+
+  String replaceTranslation(String s) {
+    return s
+        .replaceAll("Monday", "Montag")
+        .replaceAll("Tuesday", "Dienstag")
+        .replaceAll("Wednesday", "Mittwoch")
+        .replaceAll("Thursday","Donnerstag")
+        .replaceAll("Friday", "Freitag");
   }
 }
