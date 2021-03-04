@@ -11,8 +11,11 @@
 - Filter für den Stunden-/Vertretungsplan
 - Speichern des Unterrichts
 - Speichern von Lehrernamen und Fächern
-- Kommunismustool zum Austauschen von Daten
-#### Datenbank Umsetzung
-- Verschlüsselung der Zugangsdaten mit Unique ID
-- PHP-Server mit Datenbankzugriff
+### Umsetzung Unterricht
+- Bei Erstlogin/Änderung des Planes muss der User auswählen, welchen Lehrer er für welches Fach hat, wenn dieser nicht einzigartig im Stundenplan erkennbar ist
+- Gewichtung der Fachzuordnung durch den Enthaltenen Anfangsbuchstaben und Leherkuerzel
 
+### Startseite Dashboard
+- Timeline mit Stundenplan, Unterricht, Hausaufgaben
+- Besondere Ereignisse(Ferien, Termine, Feiertage) werden angezeigt
+- 
