@@ -3,9 +3,11 @@
 // found in the LICENSE file.
 
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:schulportal_hessen_app/screens/nachrichten.dart';
 import 'package:schulportal_hessen_app/screens/settings/settings.dart';
 import 'package:schulportal_hessen_app/screens/stundenplan.dart';
+import 'package:schulportal_hessen_app/screens/unterricht.dart';
 import 'package:schulportal_hessen_app/screens/vertretungsplan.dart';
 
 import '../main.dart';
@@ -43,6 +45,7 @@ class _HomeStatefulWindgetState extends State<HomeStatefulWindget> {
     VertretungsplanScreen(),
     StundenplanScreen(),
     NachrichtenScreen(),
+    UnterrichtScreen(),
     Settings()
   ];
 
@@ -131,6 +134,10 @@ class _HomeStatefulWindgetState extends State<HomeStatefulWindget> {
             BottomNavigationBarItem(
               icon: Icon(Icons.message),
               label: 'Nachrichten',
+            ),
+            BottomNavigationBarItem(
+              icon: FaIcon(FontAwesomeIcons.addressBook),
+              label: 'Unterricht',
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.settings),

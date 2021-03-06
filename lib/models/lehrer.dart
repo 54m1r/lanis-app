@@ -7,8 +7,12 @@ import 'package:html/dom.dart'
 
 class Lehrer {
   final String kuerzel;
+  String lehrername;
 
-  Lehrer(this.kuerzel);
+  Lehrer(this.kuerzel){}
+
+
+
   Future<String> getLehrerInformationen(Map<String, String> header) async {
     //https://start.schulportal.hessen.de/nachrichten.php?a=searchRecipt&q="name/kuerzel"
 
@@ -19,11 +23,12 @@ class Lehrer {
     return lehrerInfoResponse.body;
   }
 
+  void set name(String name){
+    this.lehrername = name;
+  }
   String get name{
-    return "";
+    return (this.lehrername != null ? this.lehrername : "Nicht gefunden");
   }
-  String get nachname{
-    return "";
-  }
+
 }
 
