@@ -9,7 +9,7 @@ import 'dart:developer' as developer;
 
 import '../main.dart';
 import '../models/vertretungsplanTag.dart';
-import '../models/vertretungsplanTag.dart';
+import '../models/nachricht.dart';
 import '../models/vertretungsplanTag.dart';
 
 class NachrichtenScreen extends StatefulWidget {
@@ -20,10 +20,11 @@ class NachrichtenScreen extends StatefulWidget {
 }
 
 class _NachrichtenScreen extends State<NachrichtenScreen> {
-  Future<List<Object>> _getVertretungsplan() async {
+  Future<List<Object>> _getNachrichten() async {
     
     NachrichtenParser nachrichtenParser = new NachrichtenParser(nutzer.headers, 'https://start.schulportal.hessen.de/nachrichten.php');
-    nachrichtenParser.parsen();
+    List<Nachricht> nachrichten = await nachrichtenParser.parsen();
+    developer.log(nachrichten.toString());
     
     
     /*VertretungsplanParser vertretungsplanParser = new VertretungsplanParser(
@@ -45,7 +46,7 @@ class _NachrichtenScreen extends State<NachrichtenScreen> {
     });
 
     return objects; */
-    return null;
+    return nachrichten;
   }
 
   @override
@@ -55,7 +56,7 @@ class _NachrichtenScreen extends State<NachrichtenScreen> {
 
   Widget vertretungsplanWidget() {
     return FutureBuilder(
-        future: _getVertretungsplan(),
+        future: _getNachrichten(),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (snapshot.data == null) {
             return Container(
@@ -66,7 +67,7 @@ class _NachrichtenScreen extends State<NachrichtenScreen> {
           } else if (snapshot.data.length == 0) {
             return Container(
               child: Center(
-                child: Text("Es gibt aktuell keine Vertretungen!"),
+                child: Text("Es hast noch keine Nachrichten!"),
               ),
             );
           } else {
@@ -95,7 +96,7 @@ class _NachrichtenScreen extends State<NachrichtenScreen> {
                     ),
                   );
                 } else {
-                  return _vertretunContainer(object);
+                  return ConversationList(nachricht: object);
                 }
               },
             );

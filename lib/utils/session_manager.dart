@@ -28,13 +28,17 @@ class SessionManager {
     "Accept-Encoding": "gzip, deflate, br",
     "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
     //"X-Requested-With": "XMLHttpRequest",
-    //"Content-Length": "196",
+    "Host": "start.schulportal.hessen.de",
     "Origin": "https://start.schulportal.hessen.de",
+    //"Content-Length": "36",
+    "Pragma": "no-cache",
+  "Referer": "https://start.schulportal.hessen.de/nachrichten.php",
+    "X-Requested-With": "XMLHttpRequest",
     //"DNT": "1",
     "Connection": "keep-alive",
     //"Referer": "https://start.schulportal.hessen.de/index.php",
     "Cookie": "",
-    "Cache-Control": "max-age=0",
+    "Cache-Control": "no-cache",
     "Sec-Fetch-User": "?1",
     //"Cookie": "complianceCookie=on; sid=hpdb4htb3l7ppt76o653frff18soj3356nfh4ggp3kc10vrgkdo423k8sgmc2r4mf79iagm6itr9861mf74jv124gi8q62f0rdinsk0;",
   };
@@ -105,7 +109,7 @@ class SessionManager {
 
         developer.log('Willkommen $name!');
 
-        return new Nutzer(name, headers);
+        return new Nutzer(name, headers, aesKey);
       } catch (e) {}
     }
 
@@ -217,7 +221,10 @@ class SessionManager {
     developer.log(setCookiesHeader);
     developer.log('complianceCookie=on; ' + setCookiesHeader);
     developer.log('--------------------------------');
-    var defaultCookie = 'complianceCookie=on; ';
+    var defaultCookie = 'complianceCookie=on; schulportal_lastschool=6271; schulportal_logindomain=login.schulportal.hessen.de;';
+
+    // Cookie
+    // 	complianceCookie=on; schulportal_lastschool=6271; schulportal_logindomain=login.schulportal.hessen.de; sid=01ds645ies2h3h662liepeo6t2seesuv5mf9avqguartk0uv4jn94031uggoctav7loldmfo0uc04kq3gnap26obsiujqa1jph8kcu3
 
     headers['Cookie'] = defaultCookie + setCookiesHeader;
   }
