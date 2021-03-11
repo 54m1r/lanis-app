@@ -12,6 +12,7 @@ import 'package:http/http.dart' as http;
 import 'package:html/parser.dart'
     as htmlParser; // Contains HTML parsers to generate a Document object
 import 'package:html/dom.dart' as htmlDom;
+import 'package:schulportal_hessen_app/models/unterricht/anhang.dart';
 import 'package:schulportal_hessen_app/models/unterricht/kurs.dart';
 import 'package:schulportal_hessen_app/utils/utility.dart'; // Contains DOM related classes for extracting data from elements
 
@@ -36,8 +37,12 @@ class UnterrichtParser {
       var kurs = columns[0].querySelectorAll("a")[0];
       var link = kurs.attributes['href'].split("&");
       var id = link[1].replaceAll("id=", "");
+      var lastEntry = tabellen[0]
+          .querySelector("tbody > tr[data-book='${id}']")
+          .attributes['data-entry'];
       var halbjahr = link[2].replaceAll("halb=", "");
       List<Lehrer> lehrer_list = [];
+
       for (var lehrer in columns[1].querySelectorAll("span")) {
         Lehrer l = Lehrer(removeWhitespaces(lehrer.text));
         l.name = lehrer.attributes['title'].split("(")[0];
@@ -48,8 +53,21 @@ class UnterrichtParser {
       var anhang = tabellen[0].querySelectorAll(
           "tr[data-book='${id}'] > td:last-child > .btn-group-vertical > .files");
       if (anhang.length >= 1) {
-        k.setAnhaenge(int.parse(
-            anhang[0].querySelector("button").text.substring(2).split(" ")[0]));
+        var anhaenge = anhang[0].querySelectorAll("ul > li");
+        for (var al in anhaenge) {
+          if (!al.classes.contains("divider") &&
+              al.firstChild.attributes['href'] == "#") {
+            var size = al.firstChild.text.split("(")[1];
+
+            Anhang a = Anhang(
+                id,
+                lastEntry,
+                al.firstChild.attributes['data-file'],
+                size.substring(0, size.length - 1));
+
+            k.addAnhang(a);
+          }
+        }
       }
       var stunde = tabellen[0]
           .querySelectorAll("tbody > tr[data-book='${id}'] > td > small");
@@ -57,9 +75,10 @@ class UnterrichtParser {
 
       var hausaufgabe = tabellen[0]
           .querySelectorAll("tbody > tr[data-book='${id}'] > td > .homework");
-      if(hausaufgabe.length == 1){
+      if (hausaufgabe.length == 1) {
         k.setHausaufgabe(true);
-        k.setHausaufgabeErledigt(hausaufgabe[0].getElementsByClassName("undone").length == 0);
+        k.setHausaufgabeErledigt(
+            hausaufgabe[0].getElementsByClassName("undone").length == 0);
       }
 
       kurse.add(k);
