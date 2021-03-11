@@ -13,6 +13,8 @@ import 'package:schulportal_hessen_app/models/vertretungsplan.dart';
 import 'package:schulportal_hessen_app/models/vertretungsplanTag.dart';
 import 'package:schulportal_hessen_app/utils/cryptojs_aes_encryption_helper.dart';
 
+import 'package:html/parser.dart';
+
 import 'package:http/http.dart' as http;
 
 import 'package:html/parser.dart'
@@ -34,9 +36,8 @@ class NachrichtenParser {
     //TODO
   }
 
-  Future<Vertretungsplan> parsen() async {
-    developer.log("${headers}");
-    await http.get(nachrichtenUrl, headers: headers);
+  Future<List<Nachricht>> parsen() async {
+    /*await http.get(nachrichtenUrl, headers: headers);
     await http.get('https://start.schulportal.hessen.de/js/log.js', headers: headers);
     await http.get('https://start.schulportal.hessen.de/js/log.js', headers: headers);
     await http.get('https://start.schulportal.hessen.de/css/responsive-text.css', headers: headers);
@@ -75,7 +76,8 @@ class NachrichtenParser {
     await http.get('https://start.schulportal.hessen.de/js/bootbox.min.js', headers: headers);
     await http.get('https://start.schulportal.hessen.de/js/autoadmin.js', headers: headers);
     await http.get('https://start.schulportal.hessen.de/import/rowselector/rowselector.css', headers: headers);
-    await http.get('https://start.schulportal.hessen.de/module/nachrichten/js/start.js?t=1610039521', headers: headers);
+    await http.get('https://start.schulportal.hessen.de/module/nachrichten/js/start.js?t=1610039521', headers: headers); //1610039521
+    developer.log('1610039521'+" TIMESTAMP");
     await http.get('https://start.schulportal.hessen.de/import/bootstrap-table/bootstrap-table-filter-control.js', headers: headers);
     await http.get('https://start.schulportal.hessen.de/js/jquery.storageapi.min.js', headers: headers);
     await http.get('https://start.schulportal.hessen.de/libs/jcryption/jquery.jcryption.3.1.0.js', headers: headers);
@@ -91,18 +93,48 @@ class NachrichtenParser {
     await http.get('https://start.schulportal.hessen.de/fonts/glyphicons-halflings-regular.woff2', headers: headers);
     await http.get('https://start.schulportal.hessen.de/import/fontawesome/webfonts/fa-regular-400.woff2', headers: headers);
     await http.get('https://start.schulportal.hessen.de/js/bootbox.min.js', headers: headers);
-    await http.get('https://start.schulportal.hessen.de/img/logo-schulportal-footer.png', headers: headers);
+    await http.get('https://start.schulportal.hessen.de/img/logo-schulportal-footer.png', headers: headers); */
     //await http.get('', headers: headers);
     //await http.get('', headers: headers);
 
-    var nachrichtenResponse = await http.post('https://start.schulportal.hessen.de/nachrichten.php?a=headers&getType=visibleOnly&last=0', headers: headers);
-    developer.log("${nachrichtenResponse.body}");
-    //var nachrichtenJsonResponse = convert.jsonDecode(nachrichtenResponse.body);
+    var nachrichtenResponse = await http.post('https://start.schulportal.hessen.de/nachrichten.php', headers: headers, body: {
+      "a":	"headers",
+      "getType":	"visibleOnly",
+      "last":	"0"
+    });
+
+    developer.log(headers.toString());
+    var nachrichtenJsonResponse = convert.jsonDecode(nachrichtenResponse.body);
 
     developer.log("Anfragen gesendet!");
-    developer.log(nachrichtenResponse.body.toString());
+    //developer.log(nachrichtenResponse.body.toString());
+    //developer.log(nachrichtenJsonResponse['rows']);
+    var decodedNachrichtenJsonResponse = convert.jsonDecode(decryptAESCryptoJS(nachrichtenJsonResponse['rows'], nutzer.aesKey)) ;
+    developer.log("hi1");
+   // developer.log(decodedNachrichtenJsonResponse.toString());
+    developer.log("hi3");
 
-    return null;
+    developer.log(decodedNachrichtenJsonResponse.first.toString());
+
+    //return null;
+
+    List<Nachricht> nachrichten = new List<Nachricht>();
+
+    for(var i=0;i<decodedNachrichtenJsonResponse.length;i++) {
+      var json = decodedNachrichtenJsonResponse[i];
+      final document = parse(json['SenderName']);
+      final String parsedString = parse(document.body.text).documentElement.text;
+      Nachricht nachricht = new Nachricht(json['Betreff'], parsedString, json['ungelesen'], json['kuerzel'], json['Datum']);
+      nachrichten.add(nachricht);
+      //developer.log("added "+json['betreff']);
+      //print(decodedNachrichtenJsonResponse[i]);
+    }
+
+    //List<Nachricht> nachrichten = List<Nachricht>.from(decodedNachrichtenJsonResponse.map((model)=> Nachricht.fromJson(model)));
+    //List<Nachricht> nachrichten = decodedNachrichtenJsonResponse.map((i)=>Nachricht.fromJson(i)).toList();
+    //developer.log(nachrichten.toString());
+    developer.log("hi2");
+    return nachrichten;
   }
 }
 /* POST /nachrichten.php HTTP/1.1
