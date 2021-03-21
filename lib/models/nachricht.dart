@@ -1,17 +1,9 @@
-class Nachricht {
+import 'package:flutter/cupertino.dart';
 
-  final String betreff;
-  final String senderName;
-  final bool ungelesen;
-  final String kuerzel;
-  final String datum;
-
-  Nachricht(
-    this.betreff,
-      this.senderName,
-      this.ungelesen,
-      this.kuerzel,
-      this.datum,
-   );
+class Nachricht{
+  String messageContent;
+  String messageType;
+  String messsageSender;
+  String messsageDate;
+  Nachricht({@required this.messageContent, @required this.messageType, @required this.messsageSender, @required this.messsageDate});
 }
-

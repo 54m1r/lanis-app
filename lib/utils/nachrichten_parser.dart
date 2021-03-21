@@ -7,6 +7,7 @@ import 'package:crypton/crypton.dart';
 import 'package:schulportal_hessen_app/models/fach.dart';
 import 'package:schulportal_hessen_app/models/klasse.dart';
 import 'package:schulportal_hessen_app/models/lehrer.dart';
+import 'package:schulportal_hessen_app/models/konservation.dart';
 import 'package:schulportal_hessen_app/models/raum.dart';
 import 'package:schulportal_hessen_app/models/vertretung.dart';
 import 'package:schulportal_hessen_app/models/vertretungsplan.dart';
@@ -26,6 +27,8 @@ import 'dart:convert' as convert;
 import 'package:intl/intl.dart';
 import 'package:schulportal_hessen_app/utils/utility.dart';
 
+import '../main.dart';
+
 class NachrichtenParser {
   Map<String, String> headers;
 
@@ -36,7 +39,7 @@ class NachrichtenParser {
     //TODO
   }
 
-  Future<List<Nachricht>> parsen() async {
+  Future<List<Konservation>> parsen() async {
     /*await http.get(nachrichtenUrl, headers: headers);
     await http.get('https://start.schulportal.hessen.de/js/log.js', headers: headers);
     await http.get('https://start.schulportal.hessen.de/js/log.js', headers: headers);
@@ -118,13 +121,13 @@ class NachrichtenParser {
 
     //return null;
 
-    List<Nachricht> nachrichten = new List<Nachricht>();
+    List<Konservation> nachrichten = new List<Konservation>();
 
     for(var i=0;i<decodedNachrichtenJsonResponse.length;i++) {
       var json = decodedNachrichtenJsonResponse[i];
       final document = parse(json['SenderName']);
       final String parsedString = parse(document.body.text).documentElement.text;
-      Nachricht nachricht = new Nachricht(json['Betreff'], parsedString, json['ungelesen'], json['kuerzel'], json['Datum']);
+      Konservation nachricht = new Konservation(json['Uniquid'], json['Betreff'], parsedString, json['ungelesen'], json['kuerzel'], json['Datum']);
       nachrichten.add(nachricht);
       //developer.log("added "+json['betreff']);
       //print(decodedNachrichtenJsonResponse[i]);
@@ -135,6 +138,27 @@ class NachrichtenParser {
     //developer.log(nachrichten.toString());
     developer.log("hi2");
     return nachrichten;
+  }
+
+  Future<dynamic> inhaltParsen(Konservation nachricht) async {
+    developer.log("Hey");
+
+    var nachrichtenResponse = await http.post('https://start.schulportal.hessen.de/nachrichten.php', headers: headers, body: {
+      "a":	"read",
+      "uniqid":	encryptAESCryptoJS(nachricht.Uniquid, nutzer.aesKey),
+    });
+
+    var nachrichtenJsonResponse = convert.jsonDecode(nachrichtenResponse.body);
+    var decodedNachrichtenJsonResponse = convert.jsonDecode(decryptAESCryptoJS(nachrichtenJsonResponse['message'], nutzer.aesKey));     
+
+    developer.log(decodedNachrichtenJsonResponse.toString());
+
+
+    //developer.log(nachrichtenResponse.body);
+    //developer.log(convert.jsonDecode(decodedNachrichtenJsonResponse));
+    //developer.debugger();
+
+    return decodedNachrichtenJsonResponse;
   }
 }
 /* POST /nachrichten.php HTTP/1.1

@@ -73,8 +73,13 @@ class SessionManager {
     var csrfToken = await getCSRFToken();
     RSAPublicKey rsaPublicKey = await getRsaPublicKey();
     var encryptedAesKey = encryptAesKey(rsaPublicKey, aesKey);
+    developer.log('asd1');
+    developer.log(rsaPublicKey.toString());
+    developer.log(aesKey);
+    developer.log('asd2');
 
     bool shake = await handshake(encryptedAesKey, aesKey);
+    developer.log('asd');
 
     if (shake) {
       var loginData =
@@ -108,6 +113,11 @@ class SessionManager {
         var name = loginJsonResponse['name'];
 
         developer.log('Willkommen $name!');
+        developer.log(loginResponse.headers.toString());
+        //developer.debugger();
+
+        setCookies(loginResponse.headers['set-cookie']);
+
 
         return new Nutzer(name, headers, aesKey);
       } catch (e) {}
@@ -134,12 +144,10 @@ class SessionManager {
 
       developer.log("EXIT");
       developer.log(loginPageResponse.headers.toString());
+      setCookies(loginPageResponse.headers['set-cookie']);
       developer.log("EXIT");
 
       //exit(0);
-
-      developer.log("Hallo?");
-      developer.log(loginPageResponse.headers.toString());
 
       if (loginPageResponse.statusCode == HttpStatus.movedTemporarily) {
         isRedirect = loginPageResponse.isRedirect;
@@ -158,6 +166,7 @@ class SessionManager {
       developer.log(loginPageResponse.statusCode.toString());
       developer.log(loginPageResponse.headers.toString());
       developer.log(loginPageResponse.request.headers.toString());
+      developer.log(headers['Cookie']);
       if (loginPageResponse.statusCode == 200) {
         var body = await loginPageResponse.stream.bytesToString();
         var document = htmlParser.parse(body);
@@ -180,8 +189,8 @@ class SessionManager {
       //headers['Cookie'] = defaultCookie+handshakeResponse.headers['Cookie'];
       //developer.log('set-cookie\n $cookies\n---');
 
-      developer.log(handshakeResponse.headers.toString());
-      setCookies(handshakeResponse.headers['set-cookie']);
+      //developer.log(handshakeResponse.headers.toString());
+      //setCookies(handshakeResponse.headers['set-cookie']);
 
       var challenge = convert.jsonDecode(handshakeResponse.body)['challenge'];
 

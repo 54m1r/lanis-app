@@ -38,6 +38,9 @@ class VertretungsplanParser {
     var vertretungsplanResponse =
         await http.get(vertretungsplanUrl, headers: headers);
 
+    developer.log(vertretungsplanResponse.body);
+    developer.log(headers.toString());
+
     var vertretungsPlanDocument =
         htmlParser.parse(vertretungsplanResponse.body);
     var tabellen = vertretungsPlanDocument.getElementsByTagName('table');

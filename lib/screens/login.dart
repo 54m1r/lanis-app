@@ -104,6 +104,7 @@ class _AnmeldungState extends State<Anmeldung> {
       Navigator.push(
           context, MaterialPageRoute(builder: (context) => Loading()));
       Nutzer loginNutzer = await sessionManager.login(nutzername, password);
+      developer.debugger();
 
       if (loginNutzer != null) {
         nutzer = loginNutzer;
@@ -135,11 +136,11 @@ class _AnmeldungState extends State<Anmeldung> {
 
     if (loginNutzer != null) {
       nutzer = loginNutzer;
-      await storage.write(key: 'bn', value: bn);
-      await storage.write(key: 'psw', value: psw);
-
+      //await storage.write(key: 'bn', value: bn);
+      //await storage.write(key: 'psw', value: psw);
       Navigator.push(
           context, MaterialPageRoute(builder: (context) => HomeScreen()));
+
     } else {
       showDialog<AlertDialog>(
           context: context,

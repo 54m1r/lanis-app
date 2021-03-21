@@ -3,13 +3,14 @@ import 'package:school_ui_toolkit/school_ui_toolkit.dart';
 import 'package:schulportal_hessen_app/models/vertretung.dart';
 import 'package:schulportal_hessen_app/models/vertretungsplan.dart';
 import 'package:schulportal_hessen_app/models/vertretungsplanTag.dart';
+import 'package:schulportal_hessen_app/screens/widgets/konservationen.dart';
 import 'package:schulportal_hessen_app/utils/nachrichten_parser.dart';
 import 'package:schulportal_hessen_app/utils/vertretungsplan_parser.dart';
 import 'dart:developer' as developer;
 
 import '../main.dart';
 import '../models/vertretungsplanTag.dart';
-import '../models/nachricht.dart';
+import '../models/konservation.dart';
 import '../models/vertretungsplanTag.dart';
 
 class NachrichtenScreen extends StatefulWidget {
@@ -23,7 +24,7 @@ class _NachrichtenScreen extends State<NachrichtenScreen> {
   Future<List<Object>> _getNachrichten() async {
 
     NachrichtenParser nachrichtenParser = new NachrichtenParser(nutzer.headers, 'https://start.schulportal.hessen.de/nachrichten.php');
-    List<Nachricht> nachrichten = await nachrichtenParser.parsen();
+    List<Konservation> nachrichten = await nachrichtenParser.parsen();
     developer.log(nachrichten.toString());
     
     
@@ -105,53 +106,4 @@ class _NachrichtenScreen extends State<NachrichtenScreen> {
         });
   }
 
-  Widget _vertretunContainer(Vertretung vertretung) {
-    return Container(
-      width: 180,
-      margin: EdgeInsets.only(top: 5, bottom: 5),
-      padding: EdgeInsets.all(15),
-      decoration: BoxDecoration(
-          color: Color(0xff30475e), borderRadius: BorderRadius.circular(15)),
-      child: Row(
-        children: [
-          Container(
-            height: 40,
-            width: 40,
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: Color(0xfff2a365)),
-            child: Center(
-              child: Text(
-                vertretung.stunde.toString(),
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                    color: Color(0xff30475e),
-                    fontWeight: FontWeight.w300,
-                    fontSize: 18),
-              ),
-            ),
-          ),
-          SizedBox(
-            width: 20,
-          ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                vertretung.hinweis + " " + vertretung.hinweis2,
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
-              ),
-              SizedBox(
-                height: 5,
-              ),
-              Text(
-                "${vertretung.fach.kuerzel} (${vertretung.raum.name}) - ${vertretung.lehrer.kuerzel}",
-                style: TextStyle(fontSize: 13, color: Colors.blueGrey[500]),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
 }
