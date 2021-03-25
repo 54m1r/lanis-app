@@ -89,6 +89,6 @@ jobs:
         with:
           serviceAccountJsonPlainText: ${{ secrets.PLAYSTORE_ACCOUNT_KEY }}
           packageName: vertretungsplanapp.vertretungsplan_app
-          releaseFile: app-release.aab
+          releaseFiles: app-release.aab
           track: internal
           whatsNewDirectory: distribution/whatsnew
