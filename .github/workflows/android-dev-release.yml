@@ -10,9 +10,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    - name: Fetch all history for all tags and branches
       with:
         fetch-depth: 0
+    - name: Fetch all history for all tags and branches
       run: |
         git fetch --prune --depth=10000
     - name: Install GitVersion
