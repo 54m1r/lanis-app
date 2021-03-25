@@ -26,27 +26,7 @@ class _NachrichtenScreen extends State<NachrichtenScreen> {
     NachrichtenParser nachrichtenParser = new NachrichtenParser(nutzer.headers, 'https://start.schulportal.hessen.de/nachrichten.php');
     List<Konservation> nachrichten = await nachrichtenParser.parsen();
     developer.log(nachrichten.toString());
-    
-    
-    /*VertretungsplanParser vertretungsplanParser = new VertretungsplanParser(
-        nutzer.headers,
-        'https://start.schulportal.hessen.de/vertretungsplan.php');
-    Vertretungsplan vertretungsplan = await vertretungsplanParser.parsen();
 
-    List<Object> objects = new List<Object>();
-    VertretungsplanTag alterVertretungsplanTag;
-    vertretungsplan.vertretungen.forEach((vertretung) {
-      if (alterVertretungsplanTag == null) {
-        alterVertretungsplanTag = vertretung.vertretungsPlanTag;
-        objects.add(alterVertretungsplanTag);
-      } else if (alterVertretungsplanTag != vertretung.vertretungsPlanTag) {
-        alterVertretungsplanTag = vertretung.vertretungsPlanTag;
-        objects.add(alterVertretungsplanTag);
-      }
-      objects.add(vertretung);
-    });
-
-    return objects; */
     return nachrichten;
   }
 
@@ -69,7 +49,7 @@ class _NachrichtenScreen extends State<NachrichtenScreen> {
           } else if (snapshot.data.length == 0) {
             return Container(
               child: Center(
-                child: Text("Es hast noch keine Nachrichten!"),
+                child: Text("Du hast noch keine Konservationen!"),
               ),
             );
           } else {
