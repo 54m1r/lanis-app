@@ -4,9 +4,9 @@ import 'dart:math';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'dart:developer' as developer;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:navigation_history_observer/navigation_history_observer.dart';
 import 'package:schulportal_hessen_app/models/nutzer.dart';
 import 'package:schulportal_hessen_app/screens/stundenplan.dart';
 import 'package:schulportal_hessen_app/utils/utility.dart';
@@ -19,7 +19,7 @@ import 'home.dart';
 import 'loading.dart';
 
 void main() async {
-  runApp(MaterialApp(home: Willkommen()));
+  runApp(MaterialApp(home: Willkommen(),  debugShowCheckedModeBanner: false));
 }
 
 class Willkommen extends StatelessWidget {
@@ -30,23 +30,24 @@ class Willkommen extends StatelessWidget {
   Widget build(BuildContext context) {
     void anmeldung() {}
     return MaterialApp(
-        navigatorObservers: [NavigationHistoryObserver()],
-        darkTheme: ThemeData(
-          brightness: Brightness.dark,
-          /* dark theme settings */
-          primaryColor: Color(0x222831),
-        ),
-        themeMode: ThemeMode.dark,
-        title: 'Vertretungsplan',
-        theme: ThemeData(
-          primaryColor: Colors.blue,
-          //fontFamily: GoogleFonts.notoSans().fontFamily,
-        ),
-        home: Scaffold(
-            appBar: AppBar(
-              title: Text('Anmeldung'),
-            ),
-            body: Anmeldung()));
+      darkTheme: ThemeData(
+        brightness: Brightness.dark,
+        /* dark theme settings */
+        primaryColor: Color(0x222831),
+      ),
+      themeMode: ThemeMode.dark,
+      title: 'Vertretungsplan',
+      theme: ThemeData(
+        primaryColor: Colors.blue,
+        //fontFamily: GoogleFonts.notoSans().fontFamily,
+      ),
+      home: Scaffold(
+          appBar: AppBar(
+            title: Text('Anmeldung'),
+          ),
+          body: Anmeldung()),
+      debugShowCheckedModeBanner: false,
+    );
   }
 }
 
@@ -80,16 +81,31 @@ class _UserInputState extends State<UserInput> {
 class Anmeldung extends StatefulWidget {
   @override
   _AnmeldungState createState() => _AnmeldungState();
+
+  static Future<void> _onSelectNotification(String json) async {
+    // todo: handling clicked notification
+  }
 }
+
+FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
 
 class _AnmeldungState extends State<Anmeldung> {
   @override
   Future<void> initState() {
     versucheAnzumelden();
     super.initState();
+    flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+    final android = AndroidInitializationSettings('@mipmap/ic_launcher');
+    final iOS = IOSInitializationSettings();
+    final initSettings = InitializationSettings(android: android, iOS: iOS);
+
+    flutterLocalNotificationsPlugin.initialize(initSettings,
+        onSelectNotification: Anmeldung._onSelectNotification);
   }
 
   void versucheAnzumelden() async {
+    //TODO: Schul-Id auswählen und einfügen
+
     SessionManager sessionManager = new SessionManager(
         'https://start.schulportal.hessen.de/index.php?i=6271',
         'https://start.schulportal.hessen.de/ajax.php?f=rsaPublicKey',
@@ -100,11 +116,11 @@ class _AnmeldungState extends State<Anmeldung> {
     String nutzername = await storage.read(key: 'bn');
     String password = await storage.read(key: 'psw');
 
-    if (nutzername != null || password != null) {
+    if (nutzername != null && password != null) {
       Navigator.push(
           context, MaterialPageRoute(builder: (context) => Loading()));
       Nutzer loginNutzer = await sessionManager.login(nutzername, password);
-      developer.debugger();
+      // developer.debugger();
 
       if (loginNutzer != null) {
         nutzer = loginNutzer;
@@ -122,6 +138,7 @@ class _AnmeldungState extends State<Anmeldung> {
   String bn2 = '';
 
   Future<void> anmeldung() async {
+    //TODO: Schulauswahl
     SessionManager sessionManager = new SessionManager(
         'https://start.schulportal.hessen.de/index.php?i=6271',
         'https://start.schulportal.hessen.de/ajax.php?f=rsaPublicKey',
@@ -140,7 +157,6 @@ class _AnmeldungState extends State<Anmeldung> {
       //await storage.write(key: 'psw', value: psw);
       Navigator.push(
           context, MaterialPageRoute(builder: (context) => HomeScreen()));
-
     } else {
       showDialog<AlertDialog>(
           context: context,
@@ -160,6 +176,8 @@ class _AnmeldungState extends State<Anmeldung> {
     }
   }
 
+  bool _isObscure = true;
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -167,10 +185,17 @@ class _AnmeldungState extends State<Anmeldung> {
             child: Column(
       children: [
         Container(
-          padding: EdgeInsets.symmetric(vertical: 30),
+          padding: EdgeInsets.symmetric(vertical: 20),
+          child: ClipRRect(
+              borderRadius: BorderRadius.circular(12.0),
+              child: Image(
+                image: AssetImage('assets/icon/icon.png'),
+                height: 72,
+                width: 72,
+              )),
         ),
         Container(
-          padding: EdgeInsets.symmetric(vertical: 22),
+          padding: EdgeInsets.symmetric(vertical: 35),
           child: Text('Melde dich bitte mit deinen Lanis-Daten an!'),
         ),
         ListTile(
@@ -182,12 +207,10 @@ class _AnmeldungState extends State<Anmeldung> {
             decoration: InputDecoration(
                 border: OutlineInputBorder(),
                 labelText: 'Benutzername',
-                prefix: Padding(
-                    padding: EdgeInsets.only(top: 6),
-                    child: Icon(
-                      Icons.account_circle_rounded,
-                      size: 20,
-                    ))),
+                prefixIcon: Icon(
+                  Icons.account_circle_rounded,
+                  size: 20,
+                )),
           ),
         ),
         Container(
@@ -199,17 +222,29 @@ class _AnmeldungState extends State<Anmeldung> {
               psw = passwort;
               setState(() {});
             },
-            obscureText: true,
+            obscureText: _isObscure,
             decoration: InputDecoration(
                 border: OutlineInputBorder(),
                 labelText: 'Passwort',
-                prefix: const Padding(
-                    padding: const EdgeInsets.only(right: 8),
-                    child: const Icon(Icons.lock))),
+                suffixIcon: IconButton(
+                  icon: Icon(
+                      _isObscure ? Icons.visibility : Icons.visibility_off),
+                  onPressed: () {
+                    setState(() {
+                      _isObscure = !_isObscure;
+                    });
+                  },
+                ),
+                prefixIcon: Icon(
+                  Icons.lock,
+                  size: 20,
+                )),
           ),
         ),
         OutlineButton(
-          onPressed: anmeldung,
+          onPressed: () {
+            anmeldung();
+          },
           child: Text('Anmelden'),
         )
       ],

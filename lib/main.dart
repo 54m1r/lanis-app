@@ -1,5 +1,6 @@
-
 import 'package:flutter/material.dart';
+import 'package:flutter_downloader/flutter_downloader.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:schulportal_hessen_app/screens/login.dart';
 
@@ -25,5 +26,7 @@ void main() async {
 
   developer.log(vertretungsplan.tage[2].vertretungen.length.toString()); */
 
-  runApp(MaterialApp(home: Willkommen()));
+  WidgetsFlutterBinding.ensureInitialized();
+  await FlutterDownloader.initialize();
+  runApp(MaterialApp(debugShowCheckedModeBanner: false, home: Willkommen()));
 }

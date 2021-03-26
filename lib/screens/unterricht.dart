@@ -1,6 +1,13 @@
+import 'dart:io';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:path/path.dart' as path;
+import 'package:dio/dio.dart';
+
 import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:path_provider/path_provider.dart';
+
 import 'package:schulportal_hessen_app/models/unterricht/anhang.dart';
 import 'package:schulportal_hessen_app/models/unterricht/kurs.dart';
 import 'package:schulportal_hessen_app/models/vertretung.dart';
@@ -9,6 +16,7 @@ import 'package:schulportal_hessen_app/utils/unterricht_parser.dart';
 import 'dart:developer' as developer;
 
 import '../main.dart';
+import 'login.dart';
 
 class UnterrichtScreen extends StatefulWidget {
   UnterrichtScreen({Key key}) : super(key: key);
@@ -51,7 +59,13 @@ class _AnhangSelection extends State<AnhangSelection> {
       value: checked,
       onChanged: (newValue) {
         setState(() {
-          checked = !checked;
+          if(newValue){
+            _UnterrichtScreen.selected.add(anhang);
+          }else{
+            _UnterrichtScreen.selected.remove(anhang);
+          }
+          checked = newValue;
+
         });
       },
       controlAffinity: ListTileControlAffinity.leading,
@@ -60,6 +74,10 @@ class _AnhangSelection extends State<AnhangSelection> {
 }
 
 class _UnterrichtScreen extends State<UnterrichtScreen> {
+ static List<Anhang> selected = [];
+
+
+
   Future<List<Object>> _getUnterricht() async {
     UnterrichtParser unterrichtParser = new UnterrichtParser(nutzer.headers);
     List<Kurs> kurse = await unterrichtParser.parsen();
@@ -165,7 +183,13 @@ class _UnterrichtScreen extends State<UnterrichtScreen> {
                   builder: (BuildContext context) {
                     return AlertDialog(
                       title: Text("Anhänge"),
-                      content: ListView(children: select),
+                      content: Container(width: MediaQuery.of(context).size.width-5, height: 350, child: ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: select.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            return ListTile(title: select[index]);
+
+                    },)),
                       actions: [
                         TextButton(
                           child: Text("Abbrechen"),
@@ -173,10 +197,16 @@ class _UnterrichtScreen extends State<UnterrichtScreen> {
                             Navigator.of(context).pop();
                           },
                         ),
-                        TextButton(
-                            child: Text("Herunterladen"), onPressed: () {
-                              AnhangSelection s = select[0] as AnhangSelection;
-                              developer.log("${s.key}");
+                        FlatButton.icon(
+                          textColor: Colors.blue,
+
+                          icon: Icon(Icons.download_sharp),
+                            label: Text("Herunterladen"),
+                    onPressed: () {
+
+                              Navigator.of(context).pop();
+
+                              selected.clear();
                         })
                       ],
                     );

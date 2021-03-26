@@ -4,10 +4,11 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:crypton/crypton.dart';
+import 'package:html_character_entities/html_character_entities.dart';
 import 'package:schulportal_hessen_app/models/fach.dart';
 import 'package:schulportal_hessen_app/models/klasse.dart';
-import 'package:schulportal_hessen_app/models/lehrer.dart';
 import 'package:schulportal_hessen_app/models/konservation.dart';
+import 'package:schulportal_hessen_app/models/lehrer.dart';
 import 'package:schulportal_hessen_app/models/raum.dart';
 import 'package:schulportal_hessen_app/models/vertretung.dart';
 import 'package:schulportal_hessen_app/models/vertretungsplan.dart';
@@ -127,7 +128,7 @@ class NachrichtenParser {
       var json = decodedNachrichtenJsonResponse[i];
       final document = parse(json['SenderName']);
       final String parsedString = parse(document.body.text).documentElement.text;
-      Konservation nachricht = new Konservation(json['Uniquid'], json['Betreff'], parsedString, json['ungelesen'], json['kuerzel'], json['Datum']);
+      Konservation nachricht = new Konservation(json['Uniquid'], HtmlCharacterEntities.decode(json['Betreff']), HtmlCharacterEntities.decode(parsedString), json['ungelesen'], json['kuerzel'], json['Datum']);
       nachrichten.add(nachricht);
       //developer.log("added "+json['betreff']);
       //print(decodedNachrichtenJsonResponse[i]);
@@ -149,7 +150,7 @@ class NachrichtenParser {
     });
 
     var nachrichtenJsonResponse = convert.jsonDecode(nachrichtenResponse.body);
-    var decodedNachrichtenJsonResponse = convert.jsonDecode(decryptAESCryptoJS(nachrichtenJsonResponse['message'], nutzer.aesKey));     
+    var decodedNachrichtenJsonResponse = convert.jsonDecode(decryptAESCryptoJS(nachrichtenJsonResponse['message'], nutzer.aesKey));
 
     developer.log(decodedNachrichtenJsonResponse.toString());
 

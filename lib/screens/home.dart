@@ -64,7 +64,7 @@ class _HomeStatefulWindgetState extends State<HomeStatefulWindget> {
         primaryColor: Color(0xff30475e),
       ),
       themeMode: ThemeMode.dark,
-      title: 'Vertretungsplan',
+      title: 'Schulportal Hessen App',
       theme: ThemeData(
         primaryColor: Colors.blue,
         //fontFamily: GoogleFonts.notoSans().fontFamily,

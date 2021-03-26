@@ -6,27 +6,14 @@ import 'dart:developer' as developer;
 class Loading extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        darkTheme: ThemeData(
-          brightness: Brightness.dark,
-          /* dark theme settings */
-          primaryColor: Color(0xff30475e),
-        ),
-        onGenerateRoute: (RouteSettings setting) {},
-        themeMode: ThemeMode.dark,
-        title: 'Vertretungsplan',
-        theme: ThemeData(
-          primaryColor: Colors.blue,
-          //fontFamily: GoogleFonts.notoSans().fontFamily,
-        ),
-        builder: (context, child) {
+
           return Container(
             child: ListView.builder(
                 itemCount: 2,
                 itemBuilder: (BuildContext context, int index) {
                   if (index == 0) {
                     return Padding(
-                        child: Center(child: Text("Login...")),
+                        child: Center(child: Text("Versuche Anmelden...", style: TextStyle(color: Colors.white, decoration: TextDecoration.none, fontWeight: FontWeight.bold, fontSize: 30),)),
                         padding: EdgeInsets.only(top: 100));
                   }
 
@@ -40,6 +27,6 @@ class Loading extends StatelessWidget {
                 }),
             color: Colors.white10,
           );
-        });
+        ;
   }
 }
