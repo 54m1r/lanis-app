@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:schulportal_hessen_app/screens/home.dart';
 import 'package:schulportal_hessen_app/screens/loading.dart';
 import 'package:schulportal_hessen_app/screens/login.dart';
 import 'dart:developer' as developer;
@@ -33,5 +34,5 @@ void main() async {
   );
 
 
-  runApp(MaterialApp(debugShowCheckedModeBanner: false, home: Loading()));
+  runApp(MaterialApp(debugShowCheckedModeBanner: false, home: Willkommen()));
 }
