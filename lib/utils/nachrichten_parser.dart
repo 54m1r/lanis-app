@@ -101,7 +101,7 @@ class NachrichtenParser {
     //await http.get('', headers: headers);
     //await http.get('', headers: headers);
 
-    var nachrichtenResponse = await http.post('https://start.schulportal.hessen.de/nachrichten.php', headers: headers, body: {
+    var nachrichtenResponse = await http.post(Uri.parse('https://start.schulportal.hessen.de/nachrichten.php'), headers: headers, body: {
       "a":	"headers",
       "getType":	"visibleOnly",
       "last":	"0"
@@ -144,7 +144,7 @@ class NachrichtenParser {
   Future<dynamic> inhaltParsen(Konservation nachricht) async {
     developer.log("Hey");
 
-    var nachrichtenResponse = await http.post('https://start.schulportal.hessen.de/nachrichten.php', headers: headers, body: {
+    var nachrichtenResponse = await http.post(Uri.parse('https://start.schulportal.hessen.de/nachrichten.php'), headers: headers, body: {
       "a":	"read",
       "uniqid":	encryptAESCryptoJS(nachricht.Uniquid, nutzer.aesKey),
     });

@@ -27,7 +27,7 @@ class LehrerNamenParser {
   LehrerNamenParser(this.headers, this.lehrerUrl, this.kuerzel) {}
 
   Future<String> parsen() async {
-    var lehrerResponse = await http.get(lehrerUrl, headers: headers);
+    var lehrerResponse = await http.get(Uri.parse(lehrerUrl), headers: headers);
     var res = jsonDecode(lehrerResponse.body);
     var x = 0;
     var t = "";

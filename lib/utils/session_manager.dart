@@ -88,9 +88,8 @@ class SessionManager {
 
       //developer.log('loginData\n ' + 'f=alllogin&art=all&sid=&ikey=$csrfToken&user=$username&passw=$password');
       developer.log('loginDataCrypt\n $loginDataCrypt\n---');
-
       var loginResponse = await http
-          .post(loginUrl, headers: headers, body: {'crypt': loginDataCrypt});
+          .post( Uri.parse(loginUrl), headers: headers, body: {'crypt': loginDataCrypt});
       developer.log("Headers:");
       developer.log(headers.toString());
       developer.log(loginResponse.body);
@@ -182,7 +181,7 @@ class SessionManager {
 
   Future<bool> handshake(String encryptedAesKey, String aesKey) async {
     var handshakeResponse = await http
-        .post(handshakeUrl, headers: headers, body: {'key': encryptedAesKey});
+        .post(Uri.parse(handshakeUrl), headers: headers, body: {'key': encryptedAesKey});
     if (handshakeResponse.statusCode == 200) {
       //developer.log(handshakeResponse.headers.toString());
       //setCookies("sid=hpdb4htb3l7ppt76o653frff18soj3356nfh4ggp3kc10vrgkdo423k8sgmc2r4mf79iagm6itr9861mf74jv124gi8q62f0rdinsk0;");
@@ -210,7 +209,7 @@ class SessionManager {
   }
 
   Future<RSAPublicKey> getRsaPublicKey() async {
-    var publicKeyResponse = await http.get(publicKeyUrl, headers: headers);
+    var publicKeyResponse = await http.get(Uri.parse(publicKeyUrl), headers: headers);
     if (publicKeyResponse.statusCode == 200) {
       var jsonResponse = convert.jsonDecode(publicKeyResponse.body);
       var publicKeyPem = jsonResponse['publickey'];

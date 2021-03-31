@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:schulportal_hessen_app/screens/loading.dart';
 import 'package:schulportal_hessen_app/screens/login.dart';
-
+import 'dart:developer' as developer;
 import 'models/nutzer.dart';
 
 //SessionManager sessionManager;
@@ -27,6 +28,10 @@ void main() async {
   developer.log(vertretungsplan.tage[2].vertretungen.length.toString()); */
 
   WidgetsFlutterBinding.ensureInitialized();
-  await FlutterDownloader.initialize();
-  runApp(MaterialApp(debugShowCheckedModeBanner: false, home: Willkommen()));
+  await FlutterDownloader.initialize(
+      debug: false // optional: set false to disable printing logs to console
+  );
+
+
+  runApp(MaterialApp(debugShowCheckedModeBanner: false, home: Loading()));
 }

@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'dart:developer' as developer;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -19,13 +20,14 @@ import 'home.dart';
 import 'loading.dart';
 
 void main() async {
-  runApp(MaterialApp(home: Willkommen(),  debugShowCheckedModeBanner: false));
+  runApp(MaterialApp(home: Willkommen(), debugShowCheckedModeBanner: false));
 }
 
 class Willkommen extends StatelessWidget {
   @override
   String psw = '';
   String bn = '';
+  bool save_ = false;
 
   Widget build(BuildContext context) {
     void anmeldung() {}
@@ -112,7 +114,6 @@ class _AnmeldungState extends State<Anmeldung> {
         'https://start.schulportal.hessen.de/ajax.php?f=rsaHandshake&s=' +
             (new Random().nextInt(90) + 10).toString(),
         'https://start.schulportal.hessen.de/ajax.php');
-
     String nutzername = await storage.read(key: 'bn');
     String password = await storage.read(key: 'psw');
 
@@ -136,6 +137,7 @@ class _AnmeldungState extends State<Anmeldung> {
   String psw = '';
   String bn = '';
   String bn2 = '';
+  bool save_ = false;
 
   Future<void> anmeldung() async {
     //TODO: Schulauswahl
@@ -149,15 +151,21 @@ class _AnmeldungState extends State<Anmeldung> {
     String nutzername = bn;
     String password = psw;
     developer.log(nutzername);
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => Loading()));
     Nutzer loginNutzer = await sessionManager.login(nutzername, password);
 
     if (loginNutzer != null) {
       nutzer = loginNutzer;
-      //await storage.write(key: 'bn', value: bn);
-      //await storage.write(key: 'psw', value: psw);
+      if (save_) {
+        await storage.write(key: 'bn', value: bn);
+        await storage.write(key: 'psw', value: psw);
+      }
       Navigator.push(
           context, MaterialPageRoute(builder: (context) => HomeScreen()));
     } else {
+      Navigator.pop(context);
+
       showDialog<AlertDialog>(
           context: context,
           builder: (BuildContext context) {
@@ -195,7 +203,7 @@ class _AnmeldungState extends State<Anmeldung> {
               )),
         ),
         Container(
-          padding: EdgeInsets.symmetric(vertical: 35),
+          padding: EdgeInsets.symmetric(vertical: 20),
           child: Text('Melde dich bitte mit deinen Lanis-Daten an!'),
         ),
         ListTile(
@@ -204,6 +212,8 @@ class _AnmeldungState extends State<Anmeldung> {
               bn = removeWhitespaces(benutzername);
               setState(() {});
             },
+            textInputAction: TextInputAction.next,
+
             decoration: InputDecoration(
                 border: OutlineInputBorder(),
                 labelText: 'Benutzername',
@@ -222,6 +232,9 @@ class _AnmeldungState extends State<Anmeldung> {
               psw = passwort;
               setState(() {});
             },
+            onSubmitted: (s){
+              anmeldung();
+            },
             obscureText: _isObscure,
             decoration: InputDecoration(
                 border: OutlineInputBorder(),
@@ -235,11 +248,27 @@ class _AnmeldungState extends State<Anmeldung> {
                     });
                   },
                 ),
+
                 prefixIcon: Icon(
                   Icons.lock,
                   size: 20,
                 )),
           ),
+        ),
+        Container(
+          padding: EdgeInsets.symmetric(vertical: 4),
+        ),
+        Container(
+          child: CheckboxListTile(
+            value: save_,
+            title: Text("Angemeldet bleiben"),
+            onChanged: (check) {
+              setState(() {
+                save_ = check;
+              });
+            },
+          ),
+          padding: EdgeInsets.only(left: 10, bottom: 120),
         ),
         OutlineButton(
           onPressed: () {

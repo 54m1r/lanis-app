@@ -25,7 +25,7 @@ class StundenplanParser {
   StundenplanParser(this.headers, this.stundenplanUrl) {}
 
   Future<Stundenplan> parsen() async {
-    var stundenplanResponse = await http.get(stundenplanUrl, headers: headers);
+    var stundenplanResponse = await http.get(Uri.parse(stundenplanUrl), headers: headers);
 
     var stundenplanDocument = htmlParser.parse(stundenplanResponse.body);
     var tabellen = stundenplanDocument.getElementsByTagName("table");

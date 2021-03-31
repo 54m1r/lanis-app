@@ -23,7 +23,7 @@ class UnterrichtParser {
 
   Future<List<Kurs>> parsen() async {
     var unterrichtResponse = await http.get(
-        "https://start.schulportal.hessen.de/meinunterricht.php",
+        Uri.parse("https://start.schulportal.hessen.de/meinunterricht.php"),
         headers: headers);
 
     var unterrichtDocument = htmlParser.parse(unterrichtResponse.body);

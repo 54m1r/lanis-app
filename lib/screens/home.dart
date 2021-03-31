@@ -25,6 +25,7 @@ class HomeScreen extends StatelessWidget {
     return MaterialApp(
       title: _title,
       home: HomeStatefulWindget(),
+      debugShowCheckedModeBanner: false,
     );
   }
 }

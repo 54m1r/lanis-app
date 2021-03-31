@@ -16,8 +16,8 @@ class Lehrer {
   Future<String> getLehrerInformationen(Map<String, String> header) async {
     //https://start.schulportal.hessen.de/nachrichten.php?a=searchRecipt&q="name/kuerzel"
 
-    var lehrerInfoResponse = await http.get(
-        "https://start.schulportal.hessen.de/nachrichten.php?q=${kuerzel}&a=searchRecipt",
+    var lehrerInfoResponse = await http.get(Uri.dataFromString(
+        "https://start.schulportal.hessen.de/nachrichten.php?q=${kuerzel}&a=searchRecipt"),
         headers: header);
 
     return lehrerInfoResponse.body;

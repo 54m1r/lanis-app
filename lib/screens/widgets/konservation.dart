@@ -184,7 +184,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
                               padding: EdgeInsets.all(16),
                               child: Html(
                                 data: message.messageContent.toString(),
-                                defaultTextStyle: TextStyle(fontSize: 15),
+
                               )),
                         ),
                       );
@@ -198,6 +198,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
               padding: EdgeInsets.only(left: 10, bottom: 10, top: 10),
               height: 60,
               width: double.infinity,
+              color: Color(0xFF474646),
               child: Row(
                 children: <Widget>[
                   GestureDetector(
@@ -222,9 +223,10 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
                   Expanded(
                     child: TextField(
                       decoration: InputDecoration(
-                          hintText: "Write message...",
+                          hintText: "Schreibe eine Nachricht...",
                           hintStyle: TextStyle(color: Colors.black54),
                           border: InputBorder.none),
+
                     ),
                   ),
                   SizedBox(

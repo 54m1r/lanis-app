@@ -1,4 +1,6 @@
 import 'dart:io';
+import 'package:downloads_path_provider/downloads_path_provider.dart';
+import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:path/path.dart' as path;
 import 'package:dio/dio.dart';
@@ -7,6 +9,7 @@ import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import 'package:schulportal_hessen_app/models/unterricht/anhang.dart';
 import 'package:schulportal_hessen_app/models/unterricht/kurs.dart';
@@ -59,13 +62,12 @@ class _AnhangSelection extends State<AnhangSelection> {
       value: checked,
       onChanged: (newValue) {
         setState(() {
-          if(newValue){
+          if (newValue) {
             _UnterrichtScreen.selected.add(anhang);
-          }else{
+          } else {
             _UnterrichtScreen.selected.remove(anhang);
           }
           checked = newValue;
-
         });
       },
       controlAffinity: ListTileControlAffinity.leading,
@@ -74,9 +76,7 @@ class _AnhangSelection extends State<AnhangSelection> {
 }
 
 class _UnterrichtScreen extends State<UnterrichtScreen> {
- static List<Anhang> selected = [];
-
-
+  static List<Anhang> selected = [];
 
   Future<List<Object>> _getUnterricht() async {
     UnterrichtParser unterrichtParser = new UnterrichtParser(nutzer.headers);
@@ -123,7 +123,6 @@ class _UnterrichtScreen extends State<UnterrichtScreen> {
   }
 
   Widget _unterrichtContainer(Kurs k) {
-
     List<Widget> lx = [];
     lx.add(Row(
       children: [
@@ -183,13 +182,16 @@ class _UnterrichtScreen extends State<UnterrichtScreen> {
                   builder: (BuildContext context) {
                     return AlertDialog(
                       title: Text("Anhänge"),
-                      content: Container(width: MediaQuery.of(context).size.width-5, height: 350, child: ListView.builder(
-                          shrinkWrap: true,
-                          itemCount: select.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            return ListTile(title: select[index]);
-
-                    },)),
+                      content: Container(
+                          width: MediaQuery.of(context).size.width - 5,
+                          height: 350,
+                          child: ListView.builder(
+                            shrinkWrap: true,
+                            itemCount: select.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              return ListTile(title: select[index]);
+                            },
+                          )),
                       actions: [
                         TextButton(
                           child: Text("Abbrechen"),
@@ -198,16 +200,27 @@ class _UnterrichtScreen extends State<UnterrichtScreen> {
                           },
                         ),
                         FlatButton.icon(
-                          textColor: Colors.blue,
-
-                          icon: Icon(Icons.download_sharp),
+                            textColor: Colors.blue,
+                            icon: Icon(Icons.download_sharp),
                             label: Text("Herunterladen"),
-                    onPressed: () {
-
+                            onPressed: () async {
                               Navigator.of(context).pop();
+                              var dir = await DownloadsPathProvider
+                                  .downloadsDirectory;
+                              for (Anhang sel in selected) {
+                                await FlutterDownloader.enqueue(
+                                  url: sel.url,
+                                  headers: nutzer.headers,
+                                  fileName: sel.filename,
+                                  savedDir: dir.path,
+                                  showNotification: true,
+                                  requiresStorageNotLow: true,
+                                  openFileFromNotification: true,
+                                );
+                              }
 
                               selected.clear();
-                        })
+                            })
                       ],
                     );
                   });

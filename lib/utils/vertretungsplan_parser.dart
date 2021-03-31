@@ -36,7 +36,7 @@ class VertretungsplanParser {
   Future<Vertretungsplan> parsen() async {
     developer.log("Trying to get Vertretungsplan");
     var vertretungsplanResponse =
-        await http.get(vertretungsplanUrl, headers: headers);
+        await http.get(Uri.parse(vertretungsplanUrl), headers: headers);
 
     developer.log(vertretungsplanResponse.body);
     developer.log(headers.toString());
