@@ -52,6 +52,11 @@ dependencies:
   flutter_html: ^2.0.0-nullsafety.0
   downloads_path_provider: ^0.1.0
   permission_handler: ^6.1.1
+  flutter_svg: ^0.19.3
+
+  fluentui_system_icons: ^1.1.112
+
+  badges: ^1.2.0
 
 flutter_icons:
   android: "ic_launcher"
@@ -79,6 +84,9 @@ flutter:
   # assets:
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
+
+  assets:
+    - assets/images/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

@@ -129,9 +129,9 @@ class _AnmeldungState extends State<Anmeldung> {
         Navigator.push(
             context, MaterialPageRoute(builder: (context) => HomeScreen()));
       }
-    } else {
+   // } else {
       developer.log("No password in storage... Skipping");
-    }
+   // }
   }
 
   String psw = '';

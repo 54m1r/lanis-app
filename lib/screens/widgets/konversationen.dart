@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:schulportal_hessen_app/models/konservation.dart';
+import 'package:schulportal_hessen_app/theme/colors.dart';
 
-import 'konservation.dart';
+import 'konversation.dart';
 import 'dart:developer' as developer;
 
 class ConversationList extends StatefulWidget {
@@ -26,22 +27,22 @@ class _ConversationListState extends State<ConversationList> {
         }));
       },
       child: Container(
-        padding: EdgeInsets.only(left: 16, right: 16, top: 10, bottom: 10),
+        padding: EdgeInsets.only(top: 10, bottom: 10),
         child: Row(
           children: <Widget>[
             Expanded(
               child: Row(
                 children: <Widget>[
                   CircleAvatar(
-                    backgroundColor: Color(0xfff2a365),
+                    backgroundColor: primary,
                     child: Center(
                       child: Text(
                         widget.nachricht.kuerzel,
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                            color: Color(0xff30475e),
-                            fontWeight: FontWeight.w300,
-                            fontSize: 18),
+                            color: white,
+                            fontWeight: FontWeight.w600,
+                            fontSize: 16),
                       ),
                     ),
                   ),
@@ -56,7 +57,9 @@ class _ConversationListState extends State<ConversationList> {
                         children: <Widget>[
                           Text(
                             widget.nachricht.betreff.toString(),
+                            overflow: TextOverflow.ellipsis,
                             style: TextStyle(
+                              color: white,
                                 fontSize: 16,
                                 fontWeight: widget.nachricht.ungelesen == true
                                     ? FontWeight.bold
@@ -66,10 +69,10 @@ class _ConversationListState extends State<ConversationList> {
                             height: 6,
                           ),
                           Text(
-                            widget.nachricht.senderName,
+                            widget.nachricht.senderName+" ("+widget.nachricht.datum+")",
                             style: TextStyle(
                                 fontSize: 13,
-                                color: Colors.grey.shade600,
+                                color: Colors.grey.shade500,
                                 fontWeight: widget.nachricht.ungelesen == true
                                     ? FontWeight.bold
                                     : FontWeight.normal),
@@ -80,14 +83,6 @@ class _ConversationListState extends State<ConversationList> {
                   ),
                 ],
               ),
-            ),
-            Text(
-              widget.nachricht.datum,
-              style: TextStyle(
-                  fontSize: 12,
-                  fontWeight: widget.nachricht.ungelesen == true
-                      ? FontWeight.bold
-                      : FontWeight.normal),
             ),
           ],
         ),
