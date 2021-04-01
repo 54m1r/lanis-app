@@ -3,7 +3,7 @@ import 'package:school_ui_toolkit/school_ui_toolkit.dart';
 import 'package:schulportal_hessen_app/models/vertretung.dart';
 import 'package:schulportal_hessen_app/models/vertretungsplan.dart';
 import 'package:schulportal_hessen_app/models/vertretungsplanTag.dart';
-import 'package:schulportal_hessen_app/screens/widgets/konservationen.dart';
+import 'package:schulportal_hessen_app/screens/widgets/konversationen.dart';
 import 'package:schulportal_hessen_app/utils/nachrichten_parser.dart';
 import 'package:schulportal_hessen_app/utils/vertretungsplan_parser.dart';
 import 'dart:developer' as developer;
@@ -64,7 +64,6 @@ class _NachrichtenScreen extends State<NachrichtenScreen> {
 
                 if (object is VertretungsplanTag) {
                   return Container(
-                    margin: EdgeInsets.only(bottom: 10),
                     child: RichText(
                       text: TextSpan(children: <TextSpan>[
                         TextSpan(

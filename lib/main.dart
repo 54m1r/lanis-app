@@ -4,15 +4,20 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:schulportal_hessen_app/screens/home.dart';
 import 'package:schulportal_hessen_app/screens/loading.dart';
+import 'package:schulportal_hessen_app/screens/dashboard.dart';
 import 'package:schulportal_hessen_app/screens/login.dart';
 import 'dart:developer' as developer;
 import 'models/nutzer.dart';
+
+import 'package:flutter/services.dart';
 
 //SessionManager sessionManager;
 Nutzer nutzer;
 final storage = new FlutterSecureStorage();
 
 void main() async {
+
+  SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.bottom]);
   /*SessionManager sessionManager = new SessionManager('https://start.schulportal.hessen.de/index.php?i=6271',
       'https://start.schulportal.hessen.de/ajax.php?f=rsaPublicKey',
       'https://start.schulportal.hessen.de/ajax.php?f=rsaHandshake&s='+(new Random().nextInt(90) + 10).toString(),
@@ -35,4 +40,28 @@ void main() async {
 
 
   runApp(MaterialApp(debugShowCheckedModeBanner: false, home: Willkommen()));
+}
+class SchoolManagement extends StatefulWidget {
+  @override
+  _SchoolManagementState createState() => _SchoolManagementState();
+}
+
+class _SchoolManagementState extends State<SchoolManagement> {
+  int _selectedItemIndex = 0;
+  final List pages = [
+    CalendarPage(),
+    null,
+    null,
+    CalendarPage(),
+    null,
+  ];
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: Scaffold(
+          body: pages[_selectedItemIndex]
+      ),
+    );
+  }
 }

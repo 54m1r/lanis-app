@@ -52,6 +52,11 @@ dependencies:
   flutter_html: ^2.0.0-nullsafety.0
   ext_storage: ^1.0.3
   permission_handler: ^6.1.1
+  flutter_svg: ^0.21.0-nullsafety.0
+
+  fluentui_system_icons: ^1.1.112
+
+  badges: ^1.2.0
 
 flutter_icons:
   android: "ic_launcher"
@@ -74,6 +79,7 @@ flutter:
   uses-material-design: true
   assets:
     - assets/icon/icon.png
+    - assets/images/
 
   # To add assets to your application, add an assets section, like this:
   # assets:
