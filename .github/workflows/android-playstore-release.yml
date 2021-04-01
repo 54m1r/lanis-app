@@ -2,7 +2,7 @@ name: Demo App PlayStore Release
 
 on:
   push:
-    branches: [ develop ]
+    branches: [ release ]
 
 jobs:
   version:
