@@ -1,5 +1,5 @@
 import 'dart:io';
-import 'package:downloads_path_provider/downloads_path_provider.dart';
+import 'package:ext_storage/ext_storage.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:path/path.dart' as path;
@@ -205,14 +205,13 @@ class _UnterrichtScreen extends State<UnterrichtScreen> {
                             label: Text("Herunterladen"),
                             onPressed: () async {
                               Navigator.of(context).pop();
-                              var dir = await DownloadsPathProvider
-                                  .downloadsDirectory;
+                              var dir = await ExtStorage.getExternalStoragePublicDirectory(ExtStorage.DIRECTORY_DOWNLOADS);
                               for (Anhang sel in selected) {
                                 await FlutterDownloader.enqueue(
                                   url: sel.url,
                                   headers: nutzer.headers,
                                   fileName: sel.filename,
-                                  savedDir: dir.path,
+                                  savedDir: dir,
                                   showNotification: true,
                                   requiresStorageNotLow: true,
                                   openFileFromNotification: true,
