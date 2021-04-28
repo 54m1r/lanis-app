@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:schulportal_hessen_app/models/konservation.dart';
+
 import 'package:schulportal_hessen_app/theme/colors.dart';
 
-import 'konversation.dart';
 import 'dart:developer' as developer;
+
+import 'konversation.dart';
 
 class ConversationList extends StatefulWidget {
   Konservation nachricht;

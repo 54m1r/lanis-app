@@ -13,8 +13,10 @@ import 'package:schulportal_hessen_app/screens/settings/settings.dart';
 import 'package:schulportal_hessen_app/screens/stundenplan.dart';
 import 'package:schulportal_hessen_app/screens/unterricht.dart';
 import 'package:schulportal_hessen_app/screens/vertretungsplan.dart';
+import 'dart:developer' as developer;
 
 import 'package:schulportal_hessen_app/theme/colors.dart';
+import 'package:schulportal_hessen_app/utils/schule_parser.dart';
 
 import '../main.dart';
 
@@ -26,8 +28,12 @@ class HomeScreen extends StatefulWidget {
 class _RootAppState extends State<HomeScreen> {
   int pageIndex = 2;
 
+
+
   @override
   Widget build(BuildContext context) {
+
+
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
